@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-db": "node ./seed/create/index.js",
-    "populate-db": "node ./seed/populate/index.js"
+    "populate-db": "node ./seed/populate/index.js",
+    "drop-db": "node ./seed/drop/index.js"
   },
   "type": "module",
   "keywords": [],
