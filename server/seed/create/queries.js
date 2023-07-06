@@ -6,59 +6,63 @@ export {
   createPostsQuery,
   createPublicMessagesQuery,
   createUsersQuery,
+  createUsersCredentialsQuery,
 };
 
 const createPlanetsQuery = `CREATE TABLE planets (
-    id serial PRIMARY KEY,
-    name varchar(30) UNIQUE,
-    rotation_period char(7),
-    orbital_period char(7),
-    diameter char(7),
-    climate varchar(100),
-    gravity varchar(40),
-    terrain varchar(100),
-    surface_water char(7),
-    population char(13)
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(30) UNIQUE,
+    rotation_period CHAR(7),
+    orbital_period CHAR(7),
+    diameter CHAR(7),
+    climate VARCHAR(100),
+    gravity VARCHAR(40),
+    terrain VARCHAR(100),
+    surface_water CHAR(7),
+    population CHAR(13)
     );`;
 
 const createAffinityQuery = ` CREATE TABLE affinity (
-        id serial PRIMARY KEY,
-        name varchar(30) NOT NULL UNIQUE
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(30) NOT NULL UNIQUE
         );`;
 
 const createUsersQuery = `CREATE TABLE users (
-        id serial PRIMARY KEY,
-        username varchar(50) NOT NULL,
-        role varchar(20) NOT NULL,
-        bot boolean NOT NULL,
-        affinity_name varchar(30) REFERENCES affinity(name) NOT NULL,
-        homeworld_name varchar(30) REFERENCES planets(name),
-        email varchar(60) UNIQUE NOT NULL,
-        created_at date default now()
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(50) NOT NULL,
+        role VARCHAR(20) NOT NULL,
+        bot BOOLEAN NOT NULL,
+        affinity_name VARCHAR(30) REFERENCES affinity(name) NOT NULL,
+        homeworld_name VARCHAR(30) REFERENCES planets(name),
+        email VARCHAR(60) UNIQUE NOT NULL,
+        oauth_provider VARCHAR(255),
+        oauth_id VARCHAR(255),
+        oauth_access_token VARCHAR(255),
+        created_at DATE DEFAULT NOW()
         );
 `;
 const createPostsQuery = `CREATE TABLE posts (
-        id serial PRIMARY KEY,
-        user_id integer REFERENCES users(id),
-        title varchar(50) NOT NULL,
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id),
+        title VARCHAR(50) NOT NULL,
         body text NOT NULL,
-        likes integer default 0,
-        created_at date default now()
+        likes INTEGER DEFAULT 0,
+        created_at DATE DEFAULT NOW()
         );`;
 
 const createCommentsQuery = `CREATE TABLE "comments" (
-        id serial PRIMARY KEY,
-        user_id integer REFERENCES users(id),
-        post_id integer REFERENCES posts(id),
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id),
+        post_id INTEGER REFERENCES posts(id),
         body text NOT NULL,
-        likes integer DEFAULT 0,
-        created_at date default now()
+        likes INTEGER DEFAULT 0,
+        created_at DATE DEFAULT NOW()
         );`;
 
 const createFriendshipQuery = `CREATE TABLE friendship (
-        requester_id integer NOT NULL,
-        addressee_id integer NOT NULL,
-        created_at date default now(),
+        requester_id INTEGER NOT NULL,
+        addressee_id INTEGER NOT NULL,
+        created_at DATE DEFAULT NOW(),
         CONSTRAINT friendship_pk PRIMARY KEY(requester_id, addressee_id),
         CONSTRAINT friendship_to_requester_fk FOREIGN KEY (requester_id)
             REFERENCES users(id),
@@ -68,9 +72,16 @@ const createFriendshipQuery = `CREATE TABLE friendship (
         );`;
 
 const createPublicMessagesQuery = `CREATE TABLE public_messages (
-        id serial PRIMARY KEY,
-        user_id integer REFERENCES users(id),
-        body varchar(250) NOT NULL,
-        status varchar(20) NOT NULL DEFAULT 'available',
-        created_at date default now()
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id),
+        body VARCHAR(250) NOT NULL,
+        status VARCHAR(20) NOT NULL DEFAULT 'available',
+        created_at DATE DEFAULT NOW()
+    );`;
+
+const createUsersCredentialsQuery = `CREATE TABLE users_credentials (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id),
+        password VARCHAR(255),
+        created_at DATE DEFAULT NOW()
     );`;

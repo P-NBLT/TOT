@@ -6,6 +6,7 @@ import {
   createPlanetsQuery,
   createPostsQuery,
   createPublicMessagesQuery,
+  createUsersCredentialsQuery,
   createUsersQuery,
 } from "./queries.js";
 
@@ -14,6 +15,7 @@ import {
   ${createAffinityQuery}
   ${createUsersQuery}
   ${createPostsQuery}
+  ${createUsersCredentialsQuery}
   ${createCommentsQuery}
   ${createFriendshipQuery}
   ${createPublicMessagesQuery}`;
