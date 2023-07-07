@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-db": "node ./seed/create/index.js",
-    "populate-db": "node ./seed/populate/index.js",
-    "drop-db": "node ./seed/drop/index.js",
-    "friends-db": "node ./seed/relationship/index.js"
+    "build-db": "NODE_ENV=development node ./seed/create/index.js",
+    "populate-db": "NODE_ENV=development node ./seed/populate/index.js",
+    "drop-db": "NODE_ENV=development node ./seed/drop/index.js",
+    "friends-db": "NODE_ENV=development node ./seed/relationship/index.js",
+    "dev": "NODE_ENV=development nodemon ./index.js"
   },
   "type": "module",
   "keywords": [],
@@ -16,9 +17,12 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.4.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "inquirer": "^9.2.7",
+    "nodemon": "^2.0.22",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pg": "^8.11.1"
