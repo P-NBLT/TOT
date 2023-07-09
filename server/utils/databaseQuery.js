@@ -1,7 +1,7 @@
 import pool from "../config/database.js";
 
-export async function executeQuery(query, values = [], cb) {
-  const client = await pool.connect();
+export async function executeQuery(query, values = [], errorCb) {
+  const client = await pool.connect().catch((err) => errorCb(err));
 
   try {
     await client.query("BEGIN");
@@ -13,7 +13,7 @@ export async function executeQuery(query, values = [], cb) {
     return result.rows;
   } catch (err) {
     await client.query("ROLLBACK");
-    return cb(err);
+    return errorCb(err);
   } finally {
     client.release(true);
   }
