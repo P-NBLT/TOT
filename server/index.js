@@ -5,6 +5,6 @@ import { config } from "./config/index.js";
 console.log(`This process has pid::: ${pid}`);
 const httpServer = createHttpServer();
 
-const PORT = config.SERVER_PORT;
+const PORT = config.SERVER_PORT || 8000;
 
 httpServer.listen(PORT, () => console.log(`listening on PORT ${PORT}`));
