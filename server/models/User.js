@@ -1,4 +1,6 @@
 import { executeQuery } from "../utils/databaseQuery.js";
+import bcrypt from "bcrypt";
+import { config } from "../config/index.js";
 
 const User = {
   createLocal: async function createUserLocal(userInfo) {
@@ -31,7 +33,10 @@ const User = {
                                 VALUES ($1, $2)
                                 RETURNING *
                                 `;
-      const credentialsValues = [userId, password];
+
+      const hashedPassword = await bcrypt.hash(password, Number(config.SALT));
+
+      const credentialsValues = [userId, hashedPassword];
       await executeQuery(credentialsQuery, credentialsValues);
       return user;
     } catch (err) {

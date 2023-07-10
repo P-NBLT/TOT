@@ -17,4 +17,5 @@ export const config = {
   PASSWORD: process.env.PASSWORD,
   DATABASE: process.env.DATABASE,
   SERVER_PORT: process.env.SERVER_PORT,
+  SALT: process.env.SALT,
 };

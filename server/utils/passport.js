@@ -2,6 +2,7 @@ import passport from "passport";
 import LocalStrategy from "passport-local";
 import session from "express-session";
 import User from "../models/User.js";
+import bcrypt from "bcrypt";
 
 const store = new session.MemoryStore();
 
@@ -28,8 +29,10 @@ export function initializePassport(app) {
           console.log(user);
           if (user.success === false) return done(user.errorMessage);
           if (!user) done(null, false);
-          if (password === user.password) done(null, user);
-          //need bcrypt to check hashed password + handle result
+
+          const match = await bcrypt.compare(password, user.password);
+          if (!match) done(null, false);
+          return done(null, user);
         }
       )
     );
