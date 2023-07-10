@@ -1,5 +1,4 @@
 import { executeQuery } from "../utils/databaseQuery.js";
-import { errorQueryDataBase } from "../utils/error/databaseError.js";
 
 const User = {
   createLocal: async function createUserLocal(userInfo) {
@@ -26,22 +25,14 @@ const User = {
         homeworld_name,
         email,
       ];
-      const user = await executeQuery(
-        userQuery,
-        userValues,
-        errorQueryDataBase
-      );
+      const user = await executeQuery(userQuery, userValues);
       const userId = user[0].id;
       const credentialsQuery = `INSERT INTO users_credentials (user_id, password)
                                 VALUES ($1, $2)
                                 RETURNING *
                                 `;
       const credentialsValues = [userId, password];
-      await executeQuery(
-        credentialsQuery,
-        credentialsValues,
-        errorQueryDataBase
-      );
+      await executeQuery(credentialsQuery, credentialsValues);
       return user;
     } catch (err) {
       console.log(err.message);
@@ -77,14 +68,40 @@ const User = {
         oauth_id,
         oauth_access_token,
       ];
-      const user = await executeQuery(
-        userQuery,
-        userValues,
-        errorQueryDataBase
-      );
+      const user = await executeQuery(userQuery, userValues);
       return user;
     } catch (err) {
       console.log(err);
+      return { success: false, errorMessage: err.message };
+    }
+  },
+  findUserByEmail: async function findUserByEmail(email) {
+    try {
+      console.log("TRIGGER FROM MODEL", email);
+      const query = `SELECT *
+                     FROM users 
+                     WHERE users.email = $1`;
+      const values = [email];
+      const response = await executeQuery(query, values);
+      const user = response[0];
+      if (user.length === 0) return false;
+      return user;
+    } catch (err) {
+      return { success: false, errorMessage: err.message };
+    }
+  },
+  findUserLocalLogin: async function findUserLocalLogin(email) {
+    try {
+      const query = `SELECT users.email, users.id, users.username, users_credentials.password 
+    FROM users, users_credentials 
+    WHERE users.email = $1 AND users_credentials.user_id = users.id`;
+
+      const values = [email];
+      const response = await executeQuery(query, values);
+      const user = response[0];
+      if (user.length === 0) return false;
+      return user;
+    } catch (err) {
       return { success: false, errorMessage: err.message };
     }
   },
