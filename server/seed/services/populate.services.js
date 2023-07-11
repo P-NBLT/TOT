@@ -1,3 +1,5 @@
+import User from "../../models/User.js";
+
 function affinityValuesBuilder(affinities) {
   let values = "";
   for (let affinity of affinities) {
@@ -12,14 +14,33 @@ function userValuesBuilder(characters) {
   let values = "";
 
   for (let character of characters) {
-    let value = `('${character.name}', 'user', ${true}, '${
-      character.email
+    let value = `('${character.email}')`;
+
+    values = concatValues(value, values, character, characters);
+  }
+
+  return `insert into users (email)
+        VALUES ${values}`;
+}
+async function profileValuesBuilder(characters) {
+  let values = "";
+
+  for (let character of characters) {
+    const user_id = await User.get(
+      `SELECT users.id
+       FROM users
+       WHERE users.email = $1`,
+      [character.email]
+    );
+
+    let value = `(${user_id[0].id},'${character.name}', 'user', ${true}, '${
+      character.side
     }', '${character.affinity}', '${character.homeworld}')`;
 
     values = concatValues(value, values, character, characters);
   }
 
-  return `insert into users (username, "role", bot, email, affinity_name, homeworld_name)
+  return `insert into profile (user_id, username, "role", bot, side, affinity_name, homeworld_name)
         VALUES ${values}`;
 }
 
@@ -43,4 +64,9 @@ function concatValues(value, values, record, records) {
   }
 }
 
-export { userValuesBuilder, planetsValuesBuilder, affinityValuesBuilder };
+export {
+  userValuesBuilder,
+  planetsValuesBuilder,
+  affinityValuesBuilder,
+  profileValuesBuilder,
+};
