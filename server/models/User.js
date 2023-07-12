@@ -4,77 +4,47 @@ import { config } from "../config/index.js";
 
 const User = {
   createLocal: async function createUserLocal(userInfo) {
-    const {
-      username,
-      password,
-      role = "user",
-      bot = false,
-      affinity_name,
-      homeworld_name = "Earth",
-      email,
-    } = userInfo;
-
+    const { password, email } = userInfo;
+    let lowerCaseEmail = email.toLowerCase();
     try {
-      const userQuery = `INSERT INTO users (username, role, bot, affinity_name, homeworld_name, email)
-                         VALUES($1, $2, $3, $4, $5, $6)
-                         RETURNING users.id, users.username, users.homeworld_name as homworld, affinity_name as affinity
-    `;
-      const userValues = [
-        username,
-        role,
-        bot,
-        affinity_name,
-        homeworld_name,
-        email,
-      ];
-      const user = await executeQuery(userQuery, userValues);
-      const userId = user[0].id;
-      const credentialsQuery = `INSERT INTO users_credentials (user_id, password)
-                                VALUES ($1, $2)
-                                RETURNING *
-                                `;
-
       const hashedPassword = await bcrypt.hash(password, Number(config.SALT));
-
-      const credentialsValues = [userId, hashedPassword];
-      await executeQuery(credentialsQuery, credentialsValues);
+      const userQuery = `INSERT INTO users (email, password)
+                         VALUES($1, $2)
+                         RETURNING users.id, users.email
+    `;
+      const userValues = [lowerCaseEmail, hashedPassword];
+      const user = await executeQuery(userQuery, userValues);
       return user;
     } catch (err) {
       console.log(err.message);
       return { success: false, errorMessage: err.message };
     }
   },
-  createOauth: async function createUserOauth(userInfo) {
-    const {
-      username,
-      role = "user",
-      bot = false,
-      affinity_name,
-      homeworld_name = "Earth",
-      email,
-      oauth_provider,
-      oauth_id,
-      oauth_access_token,
-    } = userInfo;
+  createOrFindOauth: async function createOrFindUserOauth(userInfo) {
+    const { id, email, provider, accessToken, refershToken } = userInfo;
 
     try {
-      const userQuery = `INSERT INTO users (username, role, bot, affinity_name, homeworld_name, email, oauth_provider, oauth_id, oauth_access_token)
-                         VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
-                         RETURNING users.id, users.username, users.homeworld_name as homworld, affinity_name as affinity
-    `;
-      const userValues = [
-        username,
-        role,
-        bot,
-        affinity_name,
-        homeworld_name,
-        email,
-        oauth_provider,
-        oauth_id,
-        oauth_access_token,
-      ];
-      const user = await executeQuery(userQuery, userValues);
-      return user;
+      const isUserExist = await this.findUserByOauthId(id);
+
+      if (isUserExist.oauth_id) {
+        if (refershToken) {
+          console.log("REFRESH TOKEN");
+          const query =
+            "UPDATE users SET access_token = $1 WHERE users.oauth_id = $2 RETURNING *";
+          const user = await executeQuery(query, [refershToken, id]);
+          console.log("REFRESH TOKEN", user);
+          return user;
+        }
+        return isUserExist;
+      } else {
+        const userQuery = `INSERT INTO users (email, oauth_provider, oauth_id, oauth_access_token)
+                           VALUES($1, $2, $3, $4)
+                           RETURNING users.id, users.email, users.oauth_provider, oauth_access_token`;
+
+        const userValues = [email, provider, id, accessToken];
+        const user = await executeQuery(userQuery, userValues);
+        return user[0];
+      }
     } catch (err) {
       console.log(err);
       return { success: false, errorMessage: err.message };
@@ -82,11 +52,39 @@ const User = {
   },
   findUserByEmail: async function findUserByEmail(email) {
     try {
-      console.log("TRIGGER FROM MODEL", email);
       const query = `SELECT *
                      FROM users 
                      WHERE users.email = $1`;
-      const values = [email];
+      const lowerCaseEmail = email.toLowerCase();
+      const values = [lowerCaseEmail];
+      const response = await executeQuery(query, values);
+      const user = response[0];
+      if (user.length === 0) return false;
+      return user;
+    } catch (err) {
+      return { success: false, errorMessage: err.message };
+    }
+  },
+  findUserById: async function findById(id) {
+    try {
+      const query = `SELECT *
+                       FROM users 
+                       WHERE users.id = $1`;
+      const values = [id];
+      const response = await executeQuery(query, values);
+      const user = response[0];
+      if (user.length === 0) return false;
+      return user;
+    } catch (err) {
+      return { success: false, errorMessage: err.message };
+    }
+  },
+  findUserByOauthId: async function findById(id) {
+    try {
+      const query = `SELECT *
+                       FROM users 
+                       WHERE users.oauth_id = $1`;
+      const values = [id];
       const response = await executeQuery(query, values);
       const user = response[0];
       if (user.length === 0) return false;
@@ -97,7 +95,7 @@ const User = {
   },
   findUserLocalLogin: async function findUserLocalLogin(email) {
     try {
-      const query = `SELECT users.email, users.id, users.username, users_credentials.password 
+      const query = `SELECT users.email, users.id, users_credentials.password 
     FROM users, users_credentials 
     WHERE users.email = $1 AND users_credentials.user_id = users.id`;
 
@@ -106,6 +104,14 @@ const User = {
       const user = response[0];
       if (user.length === 0) return false;
       return user;
+    } catch (err) {
+      return { success: false, errorMessage: err.message };
+    }
+  },
+  get: async function get(query, values) {
+    try {
+      const result = await executeQuery(query, values);
+      return result;
     } catch (err) {
       return { success: false, errorMessage: err.message };
     }
