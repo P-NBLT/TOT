@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { createServer } from "http";
 import appRouter from "./routes/index.js";
-import { initializePassport, serializePassport } from "./utils/passport.js";
+import { initializePassport, serializePassport } from "./passport/passport.js";
 
 export function createHttpServer() {
   const app = express();
