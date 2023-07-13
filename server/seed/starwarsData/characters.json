@@ -3,456 +3,525 @@
     "name": "Luke Skywalker",
     "species": "Human",
     "homeworld": "Tatooine",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Leia Organa",
     "species": "Human",
     "homeworld": "Alderaan",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Han Solo",
     "species": "Human",
     "homeworld": "Corellia",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Darth Vader",
     "species": "Human",
     "homeworld": "Tatooine",
-    "affinity": "Empire"
+    "affinity": "Empire",
+    "side": "Dark Side"
   },
   {
     "name": "Obi-Wan Kenobi",
     "species": "Human",
     "homeworld": "Stewjon",
-    "affinity": "Republic"
+    "affinity": "Republic",
+    "side": "Light Side"
   },
   {
     "name": "Yoda",
     "species": "Yoda's species",
     "homeworld": "unknown",
-    "affinity": "Jedi Order"
+    "affinity": "Jedi Order",
+    "side": "Light Side"
   },
   {
     "name": "Anakin Skywalker",
     "species": "Human",
     "homeworld": "Tatooine",
-    "affinity": "Jedi Order"
+    "affinity": "Jedi Order",
+    "side": "Light Side"
   },
   {
     "name": "Padme Amidala",
     "species": "Human",
     "homeworld": "Naboo",
-    "affinity": "Republic"
+    "affinity": "Republic",
+    "side": "Light Side"
   },
   {
     "name": "Chewbacca",
     "species": "Wookiee",
     "homeworld": "Kashyyyk",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Lando Calrissian",
     "species": "Human",
     "homeworld": "Socorro",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Emperor Palpatine",
     "species": "Human",
     "homeworld": "Naboo",
-    "affinity": "Empire"
+    "affinity": "Empire",
+    "side": "Dark Side"
   },
   {
     "name": "Boba Fett",
     "species": "Human",
     "homeworld": "Kamino",
-    "affinity": "Bounty Hunters"
+    "affinity": "Bounty Hunters",
+    "side": "Criminal"
   },
   {
     "name": "Mace Windu",
     "species": "Human",
     "homeworld": "Haruun Kal",
-    "affinity": "Jedi Order"
+    "affinity": "Jedi Order",
+    "side": "Light Side"
   },
   {
     "name": "Count Dooku",
     "species": "Human",
     "homeworld": "Serenno",
-    "affinity": "Separatist Alliance"
+    "affinity": "Separatist Alliance",
+    "side": "Dark Side"
   },
   {
     "name": "Rey",
     "species": "Human",
     "homeworld": "Jakku",
-    "affinity": "Resistance"
+    "affinity": "Resistance",
+    "side": "Light Side"
   },
   {
     "name": "Finn",
     "species": "Human",
     "homeworld": "unknown",
-    "affinity": "Resistance"
+    "affinity": "Resistance",
+    "side": "Light Side"
   },
   {
     "name": "Poe Dameron",
     "species": "Human",
     "homeworld": "Yavin IV",
-    "affinity": "Resistance"
+    "affinity": "Resistance",
+    "side": "Light Side"
   },
   {
     "name": "Kylo Ren",
     "species": "Human",
     "homeworld": "unknown",
-    "affinity": "First Order"
+    "affinity": "First Order",
+    "side": "Dark Side"
   },
   {
     "name": "R2-D2",
     "species": "Droid",
     "homeworld": "Naboo",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "C-3PO",
     "species": "Droid",
     "homeworld": "Tatooine",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "BB-8",
     "species": "Droid",
     "homeworld": "unknown",
-    "affinity": "Resistance"
+    "affinity": "Resistance",
+    "side": "Light Side"
   },
   {
     "name": "Darth Maul",
     "species": "Dathomirian",
     "homeworld": "Dathomir",
-    "affinity": "Sith"
+    "affinity": "Sith",
+    "side": "Dark Side"
   },
   {
     "name": "Qui-Gon Jinn",
     "species": "Human",
     "homeworld": "unknown",
-    "affinity": "Jedi Order"
+    "affinity": "Jedi Order",
+    "side": "Light Side"
   },
   {
     "name": "Jango Fett",
     "species": "Human",
     "homeworld": "Concord Dawn",
-    "affinity": "Bounty Hunters"
+    "affinity": "Bounty Hunters",
+    "side": "Criminal"
   },
   {
     "name": "Captain Phasma",
     "species": "Human",
     "homeworld": "Parnassos",
-    "affinity": "First Order"
+    "affinity": "First Order",
+    "side": "Dark Side"
   },
   {
     "name": "Greedo",
     "species": "Rodian",
     "homeworld": "Rodia",
-    "affinity": "Bounty Hunters"
+    "affinity": "Bounty Hunters",
+    "side": "Criminal"
   },
   {
     "name": "BB-9E",
     "species": "Droid",
     "homeworld": "unknown",
-    "affinity": "First Order"
+    "affinity": "First Order",
+    "side": "Dark Side"
   },
   {
     "name": "Finn (FN-2187)",
     "species": "Human",
     "homeworld": "unknown",
-    "affinity": "Resistance"
+    "affinity": "Resistance",
+    "side": "Light Side"
   },
   {
     "name": "Jyn Erso",
     "species": "Human",
     "homeworld": "unknown",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Cassian Andor",
     "species": "Human",
     "homeworld": "Fest",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Baze Malbus",
     "species": "Human",
     "homeworld": "Jedha",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "K-2SO",
     "species": "Droid",
     "homeworld": "unknown",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Galen Erso",
     "species": "Human",
     "homeworld": "unknown",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Orson Krennic",
     "species": "Human",
     "homeworld": "Lexrul",
-    "affinity": "Empire"
+    "affinity": "Empire",
+    "side": "Dark Side"
   },
   {
     "name": "Bodhi Rook",
     "species": "Human",
     "homeworld": "unknown",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Chirrut Îmwe",
     "species": "Human",
     "homeworld": "Jedha",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "General Hux",
     "species": "Human",
     "homeworld": "Arlia",
-    "affinity": "First Order"
+    "affinity": "First Order",
+    "side": "Dark Side"
   },
   {
     "name": "Rose Tico",
     "species": "Human",
     "homeworld": "Hays Minor",
-    "affinity": "Resistance"
+    "affinity": "Resistance",
+    "side": "Light Side"
   },
   {
     "name": "Vice Admiral Holdo",
     "species": "Human",
     "homeworld": "Gatalenta",
-    "affinity": "Resistance"
+    "affinity": "Resistance",
+    "side": "Light Side"
   },
   {
     "name": "Tobias Beckett",
     "species": "Human",
     "homeworld": "unknown",
-    "affinity": "Criminals"
+    "affinity": "Criminals",
+    "side": "Criminal"
   },
   {
     "name": "Val",
     "species": "Human",
     "homeworld": "unknown",
-    "affinity": "Criminals"
+    "affinity": "Criminals",
+    "side": "Criminal"
   },
   {
     "name": "Dryden Vos",
     "species": "Human",
     "homeworld": "Corellia",
-    "affinity": "Criminals"
+    "affinity": "Criminals",
+    "side": "Criminal"
   },
   {
     "name": "Enfys Nest",
     "species": "Human",
     "homeworld": "Savareen",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Qi ra",
     "species": "Human",
     "homeworld": "Corellia",
-    "affinity": "Criminals"
+    "affinity": "Criminals",
+    "side": "Criminal"
   },
   {
     "name": "L3-37",
     "species": "Droid",
     "homeworld": "unknown",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Rio Durant",
     "species": "Ardennian",
     "homeworld": "Vandor",
-    "affinity": "Criminals"
+    "affinity": "Criminals",
+    "side": "Criminal"
   },
   {
     "name": "Tallie Lintra",
     "species": "Human",
     "homeworld": "Hosnian Prime",
-    "affinity": "Resistance"
+    "affinity": "Resistance",
+    "side": "Light Side"
   },
   {
     "name": "Admiral Ackbar",
     "species": "Mon Calamari",
     "homeworld": "Mon Cala",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Nien Nunb",
     "species": "Sullustan",
     "homeworld": "Sullust",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Sidon Ithano",
     "species": "Delphidian",
     "homeworld": "Kaddak",
-    "affinity": "Pirates"
+    "affinity": "Pirates",
+    "side": "Criminal"
   },
   {
     "name": "Lor San Tekka",
     "species": "Human",
     "homeworld": "unknown",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Maz Kanata",
     "species": "Unknown",
     "homeworld": "Takodana",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Ello Asty",
     "species": "Hutt",
     "homeworld": "Kessel",
-    "affinity": "Resistance"
+    "affinity": "Resistance",
+    "side": "Light Side"
   },
   {
     "name": "Snap Wexley",
     "species": "Human",
     "homeworld": "Ovanis",
-    "affinity": "Resistance"
+    "affinity": "Resistance",
+    "side": "Light Side"
   },
   {
     "name": "Captain Gregar Typho",
     "species": "Human",
     "homeworld": "Naboo",
-    "affinity": "Republic"
+    "affinity": "Republic",
+    "side": "Light Side"
   },
   {
     "name": "Owen Lars",
     "species": "Human",
     "homeworld": "Tatooine",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Beru Whitesun Lars",
     "species": "Human",
     "homeworld": "Tatooine",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Mon Mothma",
     "species": "Human",
     "homeworld": "Chandrila",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Wedge Antilles",
     "species": "Human",
     "homeworld": "Corellia",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
   {
     "name": "Biggs Darklighter",
     "species": "Human",
     "homeworld": "Tatooine",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
-
   {
     "name": "General Grievous",
     "species": "Kaleesh",
     "homeworld": "Kalee",
-    "affinity": "Separatist Alliance"
+    "affinity": "Separatist Alliance",
+    "side": "Dark Side"
   },
   {
     "name": "Nute Gunray",
     "species": "Neimodian",
     "homeworld": "Neimoidia",
-    "affinity": "Separatist Alliance"
+    "affinity": "Separatist Alliance",
+    "side": "Dark Side"
   },
   {
     "name": "Poggle the Lesser",
     "species": "Geonosian",
     "homeworld": "Geonosis",
-    "affinity": "Separatist Alliance"
+    "affinity": "Separatist Alliance",
+    "side": "Dark Side"
   },
   {
     "name": "Wat Tambor",
     "species": "Skakoan",
     "homeworld": "Skako",
-    "affinity": "Separatist Alliance"
+    "affinity": "Separatist Alliance",
+    "side": "Dark Side"
   },
   {
     "name": "Shu Mai",
     "species": "Gossam",
     "homeworld": "Castell",
-    "affinity": "Separatist Alliance"
+    "affinity": "Separatist Alliance",
+    "side": "Dark Side"
   },
-
   {
     "name": "Chancellor Palpatine",
     "species": "Human",
     "homeworld": "Naboo",
-    "affinity": "Republic"
+    "affinity": "Republic",
+    "side": "Light Side"
   },
-
   {
     "name": "Darth Sidious",
     "species": "Human",
     "homeworld": "Naboo",
-    "affinity": "Sith"
+    "affinity": "Sith",
+    "side": "Dark Side"
   },
   {
     "name": "Darth Tyranus",
     "species": "Human",
     "homeworld": "Serenno",
-    "affinity": "Sith"
+    "affinity": "Sith",
+    "side": "Dark Side"
   },
   {
     "name": "Darth Plagueis",
     "species": "Muun",
     "homeworld": "Mygeeto",
-    "affinity": "Sith"
+    "affinity": "Sith",
+    "side": "Dark Side"
   },
   {
     "name": "Darth Revan",
     "species": "Human",
     "homeworld": "unknown",
-    "affinity": "Sith"
+    "affinity": "Sith",
+    "side": "Dark Side"
   },
-
   {
     "name": "Cal Kestis",
     "species": "Human",
     "homeworld": "Bracca",
-    "affinity": "Rebellion"
+    "affinity": "Rebellion",
+    "side": "Light Side"
   },
-
   {
     "name": "Asajj Ventress",
     "species": "Dathomirian",
     "homeworld": "Dathomir",
-    "affinity": "Separatist Alliance"
+    "affinity": "Separatist Alliance",
+    "side": "Dark Side"
   },
   {
     "name": "Zam Wesell",
     "species": "Clawdite",
     "homeworld": "Zolan",
-    "affinity": "Separatist Alliance"
+    "affinity": "Separatist Alliance",
+    "side": "Dark Side"
   },
-
   {
     "name": "CT-5555 (Fives)",
     "species": "Human (Clone)",
     "homeworld": "Kamino",
-    "affinity": "Republic"
+    "affinity": "Republic",
+    "side": "Light Side"
   },
   {
     "name": "CT-5597 (Jesse)",
     "species": "Human (Clone)",
     "homeworld": "Kamino",
-    "affinity": "Republic"
+    "affinity": "Republic",
+    "side": "Light Side"
   }
 ]

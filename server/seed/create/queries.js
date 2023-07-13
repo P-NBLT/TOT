@@ -6,7 +6,7 @@ export {
   createPostsQuery,
   createPublicMessagesQuery,
   createUsersQuery,
-  createUsersCredentialsQuery,
+  createProfileQuery,
 };
 
 const createPlanetsQuery = `CREATE TABLE planets (
@@ -29,18 +29,30 @@ const createAffinityQuery = ` CREATE TABLE affinity (
 
 const createUsersQuery = `CREATE TABLE users (
         id SERIAL PRIMARY KEY,
-        username VARCHAR(50) NOT NULL,
-        role VARCHAR(20) NOT NULL,
-        bot BOOLEAN NOT NULL,
-        affinity_name VARCHAR(30) REFERENCES affinity(name) NOT NULL,
-        homeworld_name VARCHAR(30) REFERENCES planets(name),
-        email VARCHAR(60) UNIQUE NOT NULL,
+        email VARCHAR(60) UNIQUE,
+        email_verification_token VARCHAR(250) UNIQUE,
+        is_verified BOOLEAN DEFAULT false,
+        password VARCHAR(255),
         oauth_provider VARCHAR(255),
+        oauth_issuer VARCHAR(255),
         oauth_id VARCHAR(255),
         oauth_access_token VARCHAR(255),
         created_at DATE DEFAULT NOW()
         );
 `;
+
+const createProfileQuery = `CREATE TABLE profile (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) NOT NULL UNIQUE,
+        username VARCHAR(50) NOT NULL,
+        role VARCHAR(20) NOT NULL,
+        bot BOOLEAN NOT NULL,
+        side VARCHAR(20) NOT NULL,
+        affinity_name VARCHAR(30) REFERENCES affinity(name) NOT NULL,
+        homeworld_name VARCHAR(30) REFERENCES planets(name),
+        created_at DATE DEFAULT NOW()
+);`;
+
 const createPostsQuery = `CREATE TABLE posts (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id),
@@ -76,12 +88,5 @@ const createPublicMessagesQuery = `CREATE TABLE public_messages (
         user_id INTEGER REFERENCES users(id),
         body VARCHAR(250) NOT NULL,
         status VARCHAR(20) NOT NULL DEFAULT 'available',
-        created_at DATE DEFAULT NOW()
-    );`;
-
-const createUsersCredentialsQuery = `CREATE TABLE users_credentials (
-        id SERIAL PRIMARY KEY,
-        user_id INTEGER REFERENCES users(id),
-        password VARCHAR(255),
         created_at DATE DEFAULT NOW()
     );`;

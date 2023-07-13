@@ -10,7 +10,7 @@ import { executeQuery } from "../../utils/databaseQuery.js";
   DROP TABLE posts;
   DROP TABLE friendship;
   DROP TABLE public_messages;
-  DROP TABLE users_credentials;
+  DROP TABLE profile;
   DROP TABLE "users";
   DROP TABLE affinity;
   DROP TABLE planets;`;
