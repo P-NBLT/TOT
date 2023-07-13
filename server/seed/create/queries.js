@@ -30,6 +30,8 @@ const createAffinityQuery = ` CREATE TABLE affinity (
 const createUsersQuery = `CREATE TABLE users (
         id SERIAL PRIMARY KEY,
         email VARCHAR(60) UNIQUE,
+        email_verification_token VARCHAR(250) UNIQUE,
+        is_verified BOOLEAN DEFAULT false,
         password VARCHAR(255),
         oauth_provider VARCHAR(255),
         oauth_issuer VARCHAR(255),

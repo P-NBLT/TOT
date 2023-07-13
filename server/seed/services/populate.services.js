@@ -14,12 +14,12 @@ function userValuesBuilder(characters) {
   let values = "";
 
   for (let character of characters) {
-    let value = `('${character.email}')`;
+    let value = `('${character.email}', ${true})`;
 
     values = concatValues(value, values, character, characters);
   }
 
-  return `insert into users (email)
+  return `insert into users (email, is_verified)
         VALUES ${values}`;
 }
 async function profileValuesBuilder(characters) {

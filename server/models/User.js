@@ -4,20 +4,35 @@ import { config } from "../config/index.js";
 
 const User = {
   createLocal: async function createUserLocal(userInfo) {
-    const { password, email } = userInfo;
+    const { password, email, token } = userInfo;
     let lowerCaseEmail = email.toLowerCase();
     try {
       const hashedPassword = await bcrypt.hash(password, Number(config.SALT));
-      const userQuery = `INSERT INTO users (email, password)
-                         VALUES($1, $2)
+      const userQuery = `INSERT INTO users (email, password, email_verification_token)
+                         VALUES($1, $2, $3)
                          RETURNING users.id, users.email
     `;
-      const userValues = [lowerCaseEmail, hashedPassword];
+      const userValues = [lowerCaseEmail, hashedPassword, token];
       const user = await executeQuery(userQuery, userValues);
       return user;
     } catch (err) {
       console.log(err.message);
       return { success: false, errorMessage: err.message };
+    }
+  },
+  setLocalUserToVerified: async function setVerify(token) {
+    try {
+      const query = `UPDATE users
+                     SET is_verified = $1
+                     WHERE users.email_verification_token = $2
+                     RETURNING users.id, users.email;`;
+
+      const values = [true, token];
+      const user = await executeQuery(query, values);
+      if (user.length === 0) return false;
+      return user[0];
+    } catch (e) {
+      console.log(err);
     }
   },
   createOrFindOauth: async function createOrFindUserOauth(userInfo) {
@@ -28,20 +43,20 @@ const User = {
 
       if (isUserExist.oauth_id) {
         if (refershToken) {
-          console.log("REFRESH TOKEN");
-          const query =
-            "UPDATE users SET access_token = $1 WHERE users.oauth_id = $2 RETURNING *";
+          const query = `UPDATE users 
+             SET access_token = $1 
+             WHERE users.oauth_id = $2 
+             RETURNING *`;
           const user = await executeQuery(query, [refershToken, id]);
-          console.log("REFRESH TOKEN", user);
           return user;
         }
         return isUserExist;
       } else {
-        const userQuery = `INSERT INTO users (email, oauth_provider, oauth_id, oauth_access_token)
-                           VALUES($1, $2, $3, $4)
+        const userQuery = `INSERT INTO users (email, oauth_provider, oauth_id, oauth_access_token, is_verified)
+                           VALUES($1, $2, $3, $4, $5)
                            RETURNING users.id, users.email, users.oauth_provider, oauth_access_token`;
 
-        const userValues = [email, provider, id, accessToken];
+        const userValues = [email, provider, id, accessToken, true];
         const user = await executeQuery(userQuery, userValues);
         return user[0];
       }
@@ -68,8 +83,8 @@ const User = {
   findUserById: async function findById(id) {
     try {
       const query = `SELECT *
-                       FROM users 
-                       WHERE users.id = $1`;
+                     FROM users
+                     WHERE users.id = $1`;
       const values = [id];
       const response = await executeQuery(query, values);
       const user = response[0];
@@ -82,24 +97,9 @@ const User = {
   findUserByOauthId: async function findById(id) {
     try {
       const query = `SELECT *
-                       FROM users 
-                       WHERE users.oauth_id = $1`;
+                     FROM users 
+                     WHERE users.oauth_id = $1`;
       const values = [id];
-      const response = await executeQuery(query, values);
-      const user = response[0];
-      if (user.length === 0) return false;
-      return user;
-    } catch (err) {
-      return { success: false, errorMessage: err.message };
-    }
-  },
-  findUserLocalLogin: async function findUserLocalLogin(email) {
-    try {
-      const query = `SELECT users.email, users.id, users_credentials.password 
-    FROM users, users_credentials 
-    WHERE users.email = $1 AND users_credentials.user_id = users.id`;
-
-      const values = [email];
       const response = await executeQuery(query, values);
       const user = response[0];
       if (user.length === 0) return false;
