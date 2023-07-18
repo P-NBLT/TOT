@@ -30,7 +30,9 @@ function initialize(passport, User) {
             message: "Invalid email or password",
           });
 
-        const profile = await Profile.findProfileByUserID(user.id);
+        const profile = await Profile.findProfileByUserID(user.id, [
+          "username",
+        ]);
 
         if (profile) {
           user.username = profile.username;

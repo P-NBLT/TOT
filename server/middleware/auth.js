@@ -25,7 +25,9 @@ async function developmentLoggedIn(req, res, next) {
         [req.headers.oauth_id]
       );
 
-      const profile = await Profile.findProfileByUserID(user[0].id);
+      const profile = await Profile.findProfileByUserID(user[0].id, [
+        "username",
+      ]);
 
       req.user = {
         id: user[0].id,
