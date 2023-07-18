@@ -1,4 +1,4 @@
-import { executeQuery } from "../utils/databaseQuery.js";
+import { executeQuery, selectOptionsHandler } from "../utils/databaseQuery.js";
 import User from "./User.js";
 
 const Profile = {
@@ -28,16 +28,30 @@ const Profile = {
       return { success: false, errorMessage: err.message };
     }
   },
-  findProfileByUserID: async function findProfileByID(userID) {
+  findProfileByUserID: async function findProfileByID(userID, selectOption) {
     try {
-      const query = `SELECT username
-                       FROM profile
-                       WHERE user_id = $1;`;
+      let optionReturnedColumn = selectOptionsHandler(selectOption);
+      const query = `SELECT ${optionReturnedColumn}
+      FROM profile
+      WHERE user_id = $1;`;
+      const values = [userID];
 
-      const response = await executeQuery(query, [userID]);
+      const response = await executeQuery(query, values);
 
       if (response.length === 0) return false;
       return response[0];
+    } catch (err) {
+      return { success: false, errorMessage: err.message };
+    }
+  },
+  getAllProfiles: async function getAllProfiles(selectOptions) {
+    try {
+      let optionReturnedColumn = selectOptionsHandler(selectOptions);
+
+      const query = `SELECT ${optionReturnedColumn}
+                     FROM profile`;
+      const profiles = await executeQuery(query);
+      return profiles;
     } catch (err) {
       return { success: false, errorMessage: err.message };
     }
