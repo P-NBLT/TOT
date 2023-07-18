@@ -20,3 +20,10 @@ export async function executeQuery(query, values = []) {
     client.release(true);
   }
 }
+
+export function selectOptionsHandler(selectOptions) {
+  if (selectOptions === undefined || selectOptions === null) return "*";
+  else {
+    return selectOptions.join(", ");
+  }
+}
