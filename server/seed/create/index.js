@@ -6,8 +6,10 @@ import {
   createPlanetsQuery,
   createPostsQuery,
   createProfileQuery,
-  createPublicMessagesQuery,
   createUsersQuery,
+  createUsersChatQuery,
+  createMessageTableQuery,
+  createChatsTableQuery,
 } from "./queries.js";
 
 (async function createTables() {
@@ -18,7 +20,9 @@ import {
   ${createProfileQuery}
   ${createCommentsQuery}
   ${createFriendshipQuery}
-  ${createPublicMessagesQuery}`;
+  ${createChatsTableQuery}
+  ${createMessageTableQuery}
+  ${createUsersChatQuery}`;
 
   await sendQuery(query);
 })();

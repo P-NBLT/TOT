@@ -7,6 +7,9 @@ export {
   createPublicMessagesQuery,
   createUsersQuery,
   createProfileQuery,
+  createMessageTableQuery,
+  createUsersChatQuery,
+  createChatsTableQuery,
 };
 
 const createPlanetsQuery = `CREATE TABLE planets (
@@ -90,3 +93,28 @@ const createPublicMessagesQuery = `CREATE TABLE public_messages (
         status VARCHAR(20) NOT NULL DEFAULT 'available',
         created_at DATE DEFAULT NOW()
     );`;
+
+//chat_types is type of ENUM('1_to_1', 'group'))
+const createChatsTableQuery = `CREATE TABLE chats (
+        chat_id SERIAL PRIMARY KEY,
+        chat_name VARCHAR(100),
+        chat_type chat_types NOT NULL,
+        members_count INTEGER NOT NULL,
+        messages_count INTEGER DEFAULT 0,
+        creation_date DATE DEFAULT NOW()
+        );`;
+
+const createMessageTableQuery = `CREATE TABLE messages (
+                    message_id SERIAL PRIMARY KEY,
+                    chat_id INTEGER REFERENCES chats(chat_id),
+                    user_id INTEGER REFERENCES users(id),
+                    message TEXT NOT NULL,
+                    created_at DATE DEFAULT NOW()
+                );`;
+
+const createUsersChatQuery = `CREATE TABLE users_chats (
+        user_id INTEGER REFERENCES users(id),
+        chat_id INTEGER REFERENCES chats(chat_id),
+        PRIMARY KEY (user_id, chat_id),
+        created_at DATE DEFAULT NOW()
+        );`;
