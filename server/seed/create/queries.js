@@ -99,6 +99,8 @@ const createChatsTableQuery = `CREATE TABLE chats (
         chat_id SERIAL PRIMARY KEY,
         chat_name VARCHAR(100),
         chat_type chat_types NOT NULL,
+        members_count INTEGER NOT NULL,
+        messages_count INTEGER DEFAULT 0,
         creation_date DATE DEFAULT NOW()
         );`;
 
