@@ -1,4 +1,5 @@
 import User from "../../models/User.js";
+import { concatValues } from "../../utils/databaseQuery.js";
 
 function affinityValuesBuilder(affinities) {
   let values = "";
@@ -54,14 +55,6 @@ function planetsValuesBuilder(planets) {
 
   return `insert into planets (name, rotation_period, orbital_period, diameter, climate, gravity, terrain, surface_water, population)
           VALUES ${values}`;
-}
-
-function concatValues(value, values, record, records) {
-  if (record === records[records.length - 1]) {
-    return values.concat(`${value};`);
-  } else {
-    return values.concat(`${value},`);
-  }
 }
 
 export {
