@@ -12,7 +12,7 @@ function initialize(passport, User) {
         if (user.success === false) return done(user.errorMessage);
         if (!user) {
           return done(null, false, {
-            type: "email/pasword",
+            type: "email/password",
             message: "Invalid email or password",
           });
         }
@@ -26,7 +26,7 @@ function initialize(passport, User) {
         const match = await bcrypt.compare(password, user.password);
         if (!match)
           return done(null, false, {
-            type: "email/pasword",
+            type: "email/password",
             message: "Invalid email or password",
           });
 
