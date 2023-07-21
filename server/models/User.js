@@ -73,8 +73,8 @@ const User = {
       const lowerCaseEmail = email.toLowerCase();
       const values = [lowerCaseEmail];
       const response = await executeQuery(query, values);
+      if (response.length === 0) return false;
       const user = response[0];
-      if (user.length === 0) return false;
       return user;
     } catch (err) {
       return { success: false, errorMessage: err.message };
@@ -87,8 +87,8 @@ const User = {
                      WHERE users.id = $1`;
       const values = [id];
       const response = await executeQuery(query, values);
+      if (response.length === 0) return false;
       const user = response[0];
-      if (user.length === 0) return false;
       return user;
     } catch (err) {
       return { success: false, errorMessage: err.message };
@@ -101,8 +101,8 @@ const User = {
                      WHERE users.oauth_id = $1`;
       const values = [id];
       const response = await executeQuery(query, values);
+      if (response.length === 0) return false;
       const user = response[0];
-      if (user.length === 0) return false;
       return user;
     } catch (err) {
       return { success: false, errorMessage: err.message };
