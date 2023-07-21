@@ -27,3 +27,11 @@ export function selectOptionsHandler(selectOptions) {
     return selectOptions.join(", ");
   }
 }
+
+export function concatValues(value, values, record, records) {
+  if (record === records[records.length - 1]) {
+    return values.concat(`${value};`);
+  } else {
+    return values.concat(`${value},`);
+  }
+}
