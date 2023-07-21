@@ -47,7 +47,7 @@ const Chat = {
     const usersChatValues = [
       usersChatsValuesBuilder(users, chatRoom[0].chat_id),
     ];
-    console.log(usersChatValues);
+
     await executeQuery(usersChatQuery);
     return chatRoom;
   },
