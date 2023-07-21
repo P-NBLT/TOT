@@ -101,6 +101,7 @@ const createChatsTableQuery = `CREATE TABLE chats (
         chat_type chat_types NOT NULL,
         members_count INTEGER NOT NULL,
         messages_count INTEGER DEFAULT 0,
+        last_activity TIMESTAMP DEFAULT NOW(),
         creation_date DATE DEFAULT NOW()
         );`;
 
@@ -109,7 +110,7 @@ const createMessageTableQuery = `CREATE TABLE messages (
                     chat_id INTEGER REFERENCES chats(chat_id),
                     user_id INTEGER REFERENCES users(id),
                     message TEXT NOT NULL,
-                    created_at DATE DEFAULT NOW()
+                    created_at TIMESTAMP DEFAULT NOW()
                 );`;
 
 const createUsersChatQuery = `CREATE TABLE users_chats (
