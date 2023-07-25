@@ -15,12 +15,6 @@ function initialize(passport, User) {
         passReqToCallback: true,
       },
       async function (request, accessToken, refreshToken, profile, done) {
-        console.log(
-          "Trigger google strategy",
-          profile.email,
-          accessToken,
-          refreshToken
-        );
         const newUser = await User.createOrFindOauth({
           id: profile.id,
           provider: "Google",
