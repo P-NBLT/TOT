@@ -10,6 +10,7 @@ export {
   createMessageTableQuery,
   createUsersChatQuery,
   createChatsTableQuery,
+  createTypeQuery,
 };
 
 const createPlanetsQuery = `CREATE TABLE planets (
@@ -95,6 +96,8 @@ const createPublicMessagesQuery = `CREATE TABLE public_messages (
     );`;
 
 //chat_types is type of ENUM('1_to_1', 'group'))
+const createTypeQuery = `CREATE TYPE chat_types AS ENUM('1_to_1', 'group');`;
+
 const createChatsTableQuery = `CREATE TABLE chats (
         chat_id SERIAL PRIMARY KEY,
         chat_name VARCHAR(100),

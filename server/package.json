@@ -8,6 +8,7 @@
     "populate-db": "NODE_ENV=development node ./seed/populate/index.js",
     "drop-db": "NODE_ENV=development node ./seed/drop/index.js",
     "friends-db": "NODE_ENV=development node ./seed/relationship/index.js",
+    "initDb": "node ./seed/index.js",
     "dev": "NODE_ENV=development nodemon ./index.js"
   },
   "type": "module",
