@@ -46,4 +46,10 @@ jobs:
       working-directory: ./server
     - name: Run tests
       run: npm test
+      env:
+          PG_HOST: localhost
+          PG_PORT: 5432
+          PG_USERNAME: ${{secrets.POSTGRES_USER}}
+          PG_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          PG_DATABASE: ${{secrets.POSTGRES_DB}}
       working-directory: ./server
