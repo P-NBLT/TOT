@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test:serial": "NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules npx jest --runInBand test/serial",
+    "test:parallel": "NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules npx jest test/parallel",
+    "test": "NODE_ENV=testing npm run initDb && npm run test:parallel",
     "build-db": "NODE_ENV=development node ./seed/create/index.js",
     "populate-db": "NODE_ENV=development node ./seed/populate/index.js",
     "drop-db": "NODE_ENV=development node ./seed/drop/index.js",
