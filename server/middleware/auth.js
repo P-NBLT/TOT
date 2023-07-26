@@ -40,7 +40,7 @@ async function developmentLoggedIn(req, res, next) {
   } else if (req.isAuthenticated()) {
     return next();
   } else {
-    res
+    return res
       .status(401)
       .json({ message: "Not authenticated, please login.", user: req.user });
   }
