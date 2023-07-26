@@ -43,16 +43,9 @@ router.get(
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
 
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "/google/success",
-    failureRedirect: "/google/failure",
-  }),
-  (req, res) => {
-    res.status(200).json({ user: req.user });
-  }
-);
+router.get("/google/callback", passport.authenticate("google"), (req, res) => {
+  return res.status(200).json({ user: req.user });
+});
 
 router.get("/google/success", (req, res) => {
   res.status(200).json({ user: req.user });
@@ -70,7 +63,7 @@ router.post("/logout", (req, res) => {
         .status(500)
         .json({ message: `Something went wrong while loging you out: ${err}` });
     }
-    return res.status(205).send("logout");
+    return res.status(205).json("logout");
   });
 });
 

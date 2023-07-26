@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:serial": "NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules npx jest --runInBand test/serial",
+    "test:parallel": "NODE_ENV=testing NODE_OPTIONS=--experimental-vm-modules npx jest test/parallel --detectOpenHandles --forceExit",
+    "test": "NODE_ENV=testing npm run initDb && npm run test:parallel",
     "build-db": "NODE_ENV=development node ./seed/create/index.js",
     "populate-db": "NODE_ENV=development node ./seed/populate/index.js",
     "drop-db": "NODE_ENV=development node ./seed/drop/index.js",
     "friends-db": "NODE_ENV=development node ./seed/relationship/index.js",
+    "initDb": "node ./seed/index.js",
     "dev": "NODE_ENV=development nodemon ./index.js"
   },
   "type": "module",
@@ -31,5 +34,10 @@
     "passport-local": "^1.0.0",
     "pg": "^8.11.1",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.6.1",
+    "supertest": "^6.3.3",
+    "supertest-session": "^4.1.0"
   }
 }

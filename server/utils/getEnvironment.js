@@ -6,7 +6,7 @@ export async function getEnvironment() {
       type: "list",
       name: "env",
       message: "What enironment do you want to use?",
-      choices: ["development", "production"],
+      choices: ["development", "testing"],
     },
   ]);
 

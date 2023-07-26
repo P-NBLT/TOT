@@ -22,6 +22,7 @@ export async function createUser(req, res, next) {
 
 export async function setUserAsVerified(req, res) {
   const { token } = req.query;
+
   try {
     const verifiedUser = await User.setLocalUserToVerified(token);
     if (verifiedUser) {
@@ -29,7 +30,7 @@ export async function setUserAsVerified(req, res) {
         if (err) {
           return done(err);
         }
-        return res.redirect("/profile/temp");
+        return res.status(201).json(req.user);
       });
       // res.status(201).json({user: req.user})
     }

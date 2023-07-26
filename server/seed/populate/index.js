@@ -7,7 +7,7 @@ import {
   affinityValuesBuilder,
 } from "../services/populate.services.js";
 
-(async function populateTables() {
+async function populateTables() {
   // we first need to insert into affinity and homeworld
   // as users has some columns contains foreign key
   let { affinities, planets, characters } = dataManager;
@@ -26,4 +26,6 @@ import {
 
   const profileQuery = await profileValuesBuilder(characters);
   await executeQuery(profileQuery);
-})();
+}
+
+export default populateTables;

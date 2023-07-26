@@ -10,10 +10,12 @@ import {
   createUsersChatQuery,
   createMessageTableQuery,
   createChatsTableQuery,
+  createTypeQuery,
 } from "./queries.js";
 
-(async function createTables() {
-  const query = `${createPlanetsQuery}
+async function createTables(isInit) {
+  const query = `${isInit ? createTypeQuery : ""}
+  ${createPlanetsQuery}
   ${createAffinityQuery}
   ${createUsersQuery}
   ${createPostsQuery}
@@ -25,4 +27,6 @@ import {
   ${createUsersChatQuery}`;
 
   await sendQuery(query);
-})();
+}
+
+export default createTables;

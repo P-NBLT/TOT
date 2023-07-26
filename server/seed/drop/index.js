@@ -5,7 +5,7 @@ import { executeQuery } from "../../utils/databaseQuery.js";
 // and I need to start from scratch.
 // this is for development purpose only.
 
-(async function dropAllTables() {
+async function dropAllTables() {
   const query = `DROP TABLE "comments";
   DROP TABLE posts;
   DROP TABLE friendship;
@@ -18,4 +18,6 @@ import { executeQuery } from "../../utils/databaseQuery.js";
   DROP TABLE planets;`;
 
   await executeQuery(query);
-})();
+}
+
+export default dropAllTables;

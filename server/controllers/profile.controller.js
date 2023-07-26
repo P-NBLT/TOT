@@ -16,7 +16,7 @@ export async function createUserProfile(req, res) {
     return res.status(201).json({ user: req.user });
   } catch (err) {
     console.log(err);
-    res
+    return res
       .status(501)
       .json({ message: `Something went wrong while creating the profile` });
   }
