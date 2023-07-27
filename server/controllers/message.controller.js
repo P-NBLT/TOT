@@ -1,18 +1,20 @@
 import Message from "../models/Message.js";
+import chiefBot from "../services/botManager.service.js";
 
 export async function sendMessageToBot(req, res) {
-  const { message, sender_id, recipient_id, chat_id } = req.body;
+  const { message, senderId, botId, chatId } = req.body;
 
   try {
-    const message1 = await Message.storeMessage(message, sender_id, chat_id);
+    //first we want to send message to the db
+    const message1 = await Message.storeMessage(message, senderId, chatId);
 
-    const response = { message: "Hello back" }; // in the near futur answer will be feeded by a bot
+    // Then retrieve the history.
+    const history = await Message.getMessages(senderId, botId, chatId);
 
-    const message2 = await Message.storeMessage(
-      response.message,
-      recipient_id[0],
-      chat_id
-    );
+    // when we have history we send the messages to bot
+    const response = await chiefBot.channelMessage(history, botId[0]);
+
+    const message2 = await Message.storeMessage(response, botId[0], chatId);
 
     return res.status(201).json(message2);
   } catch (err) {
