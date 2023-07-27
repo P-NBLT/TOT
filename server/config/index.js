@@ -28,4 +28,5 @@ export const config = {
   GITHUB_CALLBACK_URI:
     process.env.DOMAIN + process.env.GITHUB_PATH_CALLBACK_URI,
   SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
+  OPEN_AI_API_KEY: process.env.OPEN_AI_API_KEY,
 };

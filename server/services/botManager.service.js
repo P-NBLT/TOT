@@ -1,4 +1,5 @@
 import { executeQuery } from "../utils/databaseQuery.js";
+import BotFactory from "./bot.service.js";
 
 // The singleton construction may change in the futur.
 // It is not yet fully clear what other responsability this class will hold.
@@ -24,7 +25,7 @@ const singleton = (function BotManager() {
 
       if (botProfiles.length > 0) {
         botProfiles.forEach((bot) => {
-          this.bots.push(); // bot factory function to come;
+          this.bots.push(BotFactory(bot));
         });
       } else
         throw new Error(

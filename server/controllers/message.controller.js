@@ -14,7 +14,11 @@ export async function sendMessageToBot(req, res) {
     // when we have history we send the messages to bot
     const response = await chiefBot.channelMessage(history, botId[0]);
 
-    const message2 = await Message.storeMessage(response, botId[0], chatId);
+    const message2 = await Message.storeMessage(
+      response.data.choices[0].message,
+      botId[0],
+      chatId
+    );
 
     return res.status(201).json(message2);
   } catch (err) {
