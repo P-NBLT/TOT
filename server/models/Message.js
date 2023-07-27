@@ -18,6 +18,28 @@ const Message = {
       return { success: false, errorMessage: err.message };
     }
   },
+  getMessages: async function fetchMessage(
+    senderId,
+    recipientId,
+    chatId,
+    page = 1
+  ) {
+    try {
+      const query = `SELECT * 
+                     FROM messages
+                     WHERE user_id IN ($1, $2) AND chat_id = $3
+                     ORDER BY created_at DESC
+                     LIMIT 10 * $4;`;
+      const values = [senderId, recipientId[0], chatId, page];
+
+      const messages = await executeQuery(query, values);
+
+      return messages;
+    } catch (err) {
+      console.log(err);
+      return { success: false, errorMessage: err.message };
+    }
+  },
 };
 
 export default Message;
