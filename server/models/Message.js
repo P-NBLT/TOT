@@ -40,6 +40,16 @@ const Message = {
       return { success: false, errorMessage: err.message };
     }
   },
+  getGroupMessage: async function fetchGroupMessages(chatId, page = 1) {
+    const query = `SELECT * 
+    FROM messages
+    WHERE chat_id = $1
+    ORDER BY created_at DESC
+    LIMIT 10 * $2;`;
+    const messages = await executeQuery(query, [chatId, page]);
+
+    return messages;
+  },
 };
 
 export default Message;
