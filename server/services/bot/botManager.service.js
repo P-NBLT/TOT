@@ -1,4 +1,4 @@
-import { executeQuery } from "../utils/databaseQuery.js";
+import { executeQuery } from "../../utils/databaseQuery.js";
 import BotFactory from "./bot.service.js";
 
 // The singleton construction may change in the futur.
@@ -34,8 +34,10 @@ const singleton = (function BotManager() {
     },
     async channelMessage(messages, botId) {
       const bot = this.bots.find((b) => b.character.id === botId);
-      console.log("BOOT", messages, "\n\n\n\n");
+      // console.log("BOOT", messages, "\n\n\n\n");
       return await bot.processMessage(messages);
+
+      // return `Hey!, this this ${bot.character.username} and I am happy to amswer.`;
     },
   };
 
