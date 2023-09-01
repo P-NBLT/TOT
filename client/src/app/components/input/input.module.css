@@ -1,0 +1,31 @@
+.default {
+  background-color: white;
+  padding: 5px;
+  border-radius: 8px;
+  color: black;
+
+  border: 1px solid grey;
+}
+
+.xl {
+  margin-left: 50px;
+}
+
+.button-default {
+  padding: 6px 15px;
+  border-radius: 3px;
+  border: none;
+  border-radius: 15px;
+  width: fit-content;
+  font-size: 16px;
+}
+
+.button-standard {
+  background-color: #ffa500;
+  color: white;
+  border: none;
+}
+
+.button-m {
+  width: 100px;
+}

@@ -1,0 +1,187 @@
+/* Margin */
+
+.margin-xs {
+  margin: 1px 1px 1px 1px;
+}
+.margin-sm {
+  margin: 3px 3px 3px 3px;
+}
+.margin-m {
+  margin: 5px 5px 5px 5px;
+}
+.margin-lg {
+  margin: 10px 10px 10px 10px;
+}
+.margin-xl {
+  margin: 15px 15px 15px 15px;
+}
+
+.marginTop-xs {
+  margin-top: 1px;
+}
+.marginTop-sm {
+  margin-top: 3px;
+}
+.marginTop-m {
+  margin-top: 5px;
+}
+.marginTop-lg {
+  margin-top: 10px;
+}
+.marginTop-xl {
+  margin-top: 15px;
+}
+
+.marginBottom-xs {
+  margin-bottom: 1px;
+}
+.marginBottom-sm {
+  margin-bottom: 3px;
+}
+.marginBottom-m {
+  margin-bottom: 5px;
+}
+.marginBottom-lg {
+  margin-bottom: 10px;
+}
+.marginBottom-xl {
+  margin-bottom: 15px;
+}
+
+.marginRight-xs {
+  margin-right: 1px;
+}
+.marginRight-sm {
+  margin-right: 3px;
+}
+.marginRight-m {
+  margin-right: 5px;
+}
+.marginRight-lg {
+  margin-right: 10px;
+}
+.marginRight-xl {
+  margin-right: 15px;
+}
+
+.marginLeft-xs {
+  margin-left: 1px;
+}
+.marginLeft-sm {
+  margin-left: 3px;
+}
+.marginLeft-m {
+  margin-left: 5px;
+}
+.marginLeft-lg {
+  margin-left: 10px;
+}
+.marginLeft-xl {
+  margin-left: 15px;
+}
+
+/* Padding */
+
+.padding-xs {
+  padding: 1px 1px 1px 1px;
+}
+.padding-sm {
+  padding: 3px 3px 3px 3px;
+}
+.padding-m {
+  padding: 5px 5px 5px 5px;
+}
+.padding-lg {
+  padding: 10px 10px 10px 10px;
+}
+.padding-xl {
+  padding: 15px 15px 15px 15px;
+}
+
+.paddingTop-xs {
+  padding-top: 1px;
+}
+.paddingTop-sm {
+  padding-top: 3px;
+}
+.paddingTop-m {
+  padding-top: 5px;
+}
+.paddingTop-lg {
+  padding-top: 10px;
+}
+.paddingTop-xl {
+  padding-top: 15px;
+}
+
+.paddingBottom-xs {
+  padding-bottom: 1px;
+}
+.paddingBottom-sm {
+  padding-bottom: 3px;
+}
+.paddingBottom-m {
+  padding-bottom: 5px;
+}
+.paddingBottom-lg {
+  padding-bottom: 10px;
+}
+.paddingBottom-xl {
+  padding-bottom: 15px;
+}
+
+.paddingRight-xs {
+  padding-right: 1px;
+}
+.paddingRight-sm {
+  padding-right: 3px;
+}
+.paddingRight-m {
+  padding-right: 5px;
+}
+.paddingRight-lg {
+  padding-right: 10px;
+}
+.paddingRight-xl {
+  padding-right: 15px;
+}
+
+.paddingLeft-xs {
+  padding-left: 1px;
+}
+.paddingLeft-sm {
+  padding-left: 3px;
+}
+.paddingLeft-m {
+  padding-left: 5px;
+}
+.paddingLeft-lg {
+  padding-left: 10px;
+}
+.paddingLeft-xl {
+  padding-left: 15px;
+}
+
+/* FONT */
+
+.bold {
+  font-weight: bold;
+}
+
+/* Font Size */
+
+.fontSize-xs {
+  font-size: 8px;
+}
+.fontSize-sm {
+  font-size: 12px;
+}
+.fontSize-m {
+  font-size: 16px;
+}
+.fontSize-lg {
+  font-size: 20px;
+}
+.fontSize-xl {
+  font-size: 24px;
+}
