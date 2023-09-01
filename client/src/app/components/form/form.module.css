@@ -1,0 +1,12 @@
+.master {
+  border-radius: 15px;
+  background-color: white;
+  width: fit-content;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.oauth {
+  width: 400px;
+}

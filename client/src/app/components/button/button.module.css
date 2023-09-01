@@ -1,0 +1,62 @@
+.default {
+  padding: 6px 15px;
+  border-radius: 3px;
+  border: none;
+  border-radius: 15px;
+  width: fit-content;
+  font-size: 16px;
+}
+
+.standard {
+  background-color: #ffa500;
+  color: white;
+}
+
+.primary {
+  background-color: #8b4513;
+  color: #add8e6;
+}
+.secondary {
+  background-color: #696969;
+  color: #ff0000;
+}
+.tertiary {
+  background-color: #ff4500;
+  color: #b0c4de;
+}
+.quaternary {
+  background-color: #ff6347;
+  color: #afeeee;
+}
+.quinary {
+  background-color: #b8860b;
+  color: #8b7355;
+}
+
+.google {
+  display: flex;
+
+  width: 100%;
+  border-radius: 0;
+  background-color: #ffffff;
+  color: rgba(129, 129, 129, 255);
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2.6px;
+}
+
+/* size */
+
+.size-sm {
+  width: fit-content;
+}
+
+.size-m {
+  width: 100px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.size-lg {
+  width: 200px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
