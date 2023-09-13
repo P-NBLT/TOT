@@ -1,5 +1,5 @@
 import React from "react";
-import backgroundImage from "../../assets/images/jabba palace 2.jpeg";
+import backgroundImage from "@/assets/images/jabba palace 2.jpeg";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

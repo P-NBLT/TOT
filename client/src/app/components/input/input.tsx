@@ -10,6 +10,7 @@ type props = {
   name?: string;
   addValue?: Function;
   id: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 
 type inputProps = props & Omit<CSS_PROPS_TYPES, "size">;
@@ -22,9 +23,6 @@ const Input: React.FC<inputProps> = ({ addValue, ...props }) => {
       <input
         type={props.type ? props.type : "text"}
         className={`${inputStyles.default} ${classNamesInput}`}
-        onChange={(e) =>
-          addValue && addValue({ type: props.name, value: e.target.value })
-        }
         {...props}
       ></input>
     </>
