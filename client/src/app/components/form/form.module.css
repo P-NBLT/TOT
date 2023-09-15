@@ -1,5 +1,6 @@
 .master {
-  border-radius: 15px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
   background-color: white;
   width: fit-content;
   padding: 30px;
@@ -8,10 +9,20 @@
 }
 
 .oauth {
-  width: 400px;
+  width: 100vw;
 }
 
 .blur {
   background-color: rgb(45 56 58 / 0.7);
   backdrop-filter: blur(15px);
+}
+
+@media screen and (min-width: 500px) {
+  .oauth {
+    width: 400px;
+  }
+  .master {
+    position: static;
+    border-radius: 15px;
+  }
 }

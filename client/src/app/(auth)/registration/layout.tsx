@@ -1,25 +1,17 @@
+"use client";
 import React from "react";
-import backgroundImage from "@/assets/images/jabba palace 2.jpeg";
-
+import layoutStyle from "./css/layout.module.css";
+import { useWindowSize } from "@/app/hooks/useWindowSize";
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const { height } = useWindowSize();
+
   return (
-    <html>
-      <head>
-        <title>Registration</title>
-      </head>
-      <body>
-        <div
-          style={{
-            backgroundImage: `url("${backgroundImage.src}")`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            height: "100vh",
-            width: "100%",
-          }}
-        >
-          {children}
-        </div>
-      </body>
-    </html>
+    <>
+      <style>{`.${layoutStyle.container} { height: ${height}px;}`}</style>
+      <div className={layoutStyle.container}>
+        <div className={layoutStyle["upper-content"]} />
+        {children}
+      </div>
+    </>
   );
 }
