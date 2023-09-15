@@ -1,0 +1,26 @@
+@media screen and (max-width: 500px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+  .upper-content {
+    flex: 1;
+    overflow-y: auto;
+    background-color: blue;
+    z-index: -1;
+    position: relative;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .container {
+    background-image: url("../../../../assets/images/jabba\ palace\ 2.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh !important;
+    width: 100%;
+  }
+  .upper-content {
+    display: none;
+  }
+}

@@ -33,7 +33,6 @@ const helper = {
   handleVariant(k: string, v: string, classes: any, styleModule: any) {
     const arr = v.split(" ");
     arr.forEach((e) => {
-      console.log("EEE", e);
       classes.push(styleModule[e]);
     });
   },
@@ -55,16 +54,14 @@ export function cssClassAndStyleBuilder(props: any, styleModule?: any) {
   const propsArr: any = Object.entries(props);
   for (let [k, v] of propsArr) {
     if (!helper.isCss(k)) continue;
-    console.log("FIRST", k, v);
+
     if (helper.isClassName(k, v)) {
       if (helper.isPublicClassName(k)) {
-        console.log("Second", k, v);
         classes.push(
           helper.isCoumpound(v) ? indexStyle[`${k}-${v}`] : indexStyle[k]
         );
       } else {
         helper.handleStyle(k, v, classes, styleModule);
-        console.log(classes);
       }
     } else {
       styleObject[k] = v;
@@ -80,42 +77,3 @@ export function cssClassAndStyleBuilder(props: any, styleModule?: any) {
   classes = classes.join(" ") || null;
   return [classes, styleObject];
 }
-
-// function that return an array with at index 0 the className and idx 1 the style object
-// export function a(props: any, stylesModule?: any) {
-//   let classes: any = [];
-//   const styleObject: any = {};
-//   const styleSizeKeys = Object.keys(CSS_SIZE);
-//   const classNameGeneral = Object.keys(CSS_PUBLIC_CLASSNAME);
-
-//   Object.entries(props).forEach(([k, v]: any): any => {
-//     if (k === "style" || typeof v === "function") return;
-//     if (styleSizeKeys.includes(v) || ["bold"].includes(k)) {
-//       typeof v === "boolean" &&
-//         classes.push(
-//           classNameGeneral.includes(k) ? indexStyle[k] : stylesModule[k]
-//         );
-//       typeof v === "string" &&
-//         classNameGeneral.includes(k) &&
-//         classes.push(indexStyle[`${k}-${v}`]);
-//       typeof v === "string" &&
-//         !classNameGeneral.includes(k) &&
-//         classes.push(stylesModule[v]);
-//     } else if (
-//       typeof v === "number" ||
-//       v.match(/(?:\d+(?:\.\d+)?)(px|rem|em|vh|vw|%|fr)/) ||
-//       ["color"].includes(k)
-//     ) {
-//       styleObject[k] = v;
-//     }
-//   });
-
-//   if (props.style) {
-//     Object.assign(props.style, styleObject);
-//   } else {
-//     props.style = styleObject;
-//   }
-
-//   classes = classes.join(" ") || null;
-//   return [classes, styleObject];
-// }

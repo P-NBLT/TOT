@@ -4,7 +4,7 @@ import buttonStyles from "./button.module.css";
 import { CSS_PROPS_TYPES } from "@/app/types/css";
 
 type props = {
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement | MouseEvent>;
   children: React.ReactNode;
 };
 

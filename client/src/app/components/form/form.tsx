@@ -3,11 +3,12 @@ import React from "react";
 import formStyle from "./form.module.css";
 import { CSS_PROPS_TYPES } from "@/app/types/css";
 import { cssClassAndStyleBuilder } from "@/app/utils/css";
+import { DataFormProps } from "@/app/hooks/useForm";
 
 type props = {
   children: React.ReactNode;
-  values: { value: string; type: string }[];
-  submit: Function;
+  values?: DataFormProps;
+  submit?: Function;
   id: string;
 };
 
@@ -21,7 +22,6 @@ const Form: React.FC<FormProps> = ({ children, values, submit, ...props }) => {
       className={`${formStyle.master} ${classes}`}
       {...props}
       autoComplete="on"
-      onSubmit={async (e) => await submit(e, values)}
     >
       {children}
     </form>
