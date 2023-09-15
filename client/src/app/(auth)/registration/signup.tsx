@@ -4,13 +4,15 @@ import { Button, Form, Input, Label, Typography } from "../../components";
 import useForm from "../../hooks/useForm";
 import Oauth from "./oauth";
 import { useUser } from "../../controllers/userProvider";
+import PasswordValidationCheck from "./passwordValidationCheck";
 
 type props = {
   toggleState: () => void;
 };
 const Signup: React.FC<props> = ({ toggleState }) => {
-  const { formData, addValue } = useForm();
+  const { formData, validationError, addValue, validateAndExecute } = useForm();
   const { signup } = useUser();
+
   return (
     <>
       {" "}
@@ -23,6 +25,8 @@ const Signup: React.FC<props> = ({ toggleState }) => {
           margin={"6px 0"}
           onChange={(e) => addValue({ type: "email", value: e.target.value })}
         ></Input>
+        {/* @ts-ignore */}
+        <ValidationErrorMessage message={validationError?.email} />
         <Label id="password" name="Password" />
         <Input
           placeholder="password"
@@ -34,6 +38,19 @@ const Signup: React.FC<props> = ({ toggleState }) => {
           id="password"
           margin={"6px 0"}
         ></Input>
+        {/* @ts-ignore */}
+        {validationError?.password === "Required" && (
+          //  @ts-ignore
+          <ValidationErrorMessage message={validationError?.password} />
+        )}
+        {/* @ts-ignore  */}
+        {formData?.password?.length >= 1 && (
+          <PasswordValidationCheck
+            password={formData.password}
+            //  @ts-ignore
+            error={validationError?.password}
+          />
+        )}
         <Label id="confirm-password" name="Confirm password" />
         <Input
           placeholder="confirm password"
@@ -43,14 +60,17 @@ const Signup: React.FC<props> = ({ toggleState }) => {
             addValue({ type: "confirm-password", value: e.target.value })
           }
           id="confirm-password"
-          margin={"6px 0 12px 0"}
+          margin={"6px 0 5px 0"}
         ></Input>
-
+        {/* @ts-ignore */}
+        <ValidationErrorMessage message={validationError["confirm-password"]} />
         <Button
           variant="standard"
           width="m"
-          onClick={(e: any) => signup(e, formData)}
-          margin={"5px 0 5px calc(25% + 30px)"}
+          onClick={(e: any) => {
+            validateAndExecute(e) && signup(e, formData);
+          }}
+          margin={"17px 0 5px calc(25% + 30px)"}
         >
           Sign up
         </Button>
@@ -70,3 +90,17 @@ const Signup: React.FC<props> = ({ toggleState }) => {
 };
 
 export default Signup;
+
+const ValidationErrorMessage: React.FC<{ message: string | undefined }> = ({
+  message,
+}) => {
+  return (
+    <>
+      {message ? (
+        <Typography color="red" bold fontSize={10} marginLeft={2}>
+          {message}
+        </Typography>
+      ) : null}
+    </>
+  );
+};
