@@ -4,6 +4,7 @@ import { Button, Form, Input, Label, Typography } from "../../components";
 import Oauth from "./oauth";
 import useForm from "../../hooks/useForm";
 import { useUser } from "../../controllers/userProvider";
+import { useToast } from "@/app/controllers/toastProvider";
 
 type props = {
   toggleState: () => void;
@@ -12,6 +13,15 @@ type props = {
 const Login: React.FC<props> = ({ toggleState }) => {
   const { formData, addValue } = useForm();
   const { localLogin }: any = useUser();
+  const { showToast } = useToast();
+  async function handleLogin(e: any) {
+    e.preventDefault();
+    const response = await localLogin(e, formData);
+
+    if (response.message) {
+      showToast(response.message, "error");
+    }
+  }
 
   return (
     <>
@@ -40,7 +50,7 @@ const Login: React.FC<props> = ({ toggleState }) => {
           variant="standard"
           margin={"5px 0 5px calc(25% + 30px)"}
           width="m"
-          onClick={(e: any) => localLogin(e, formData)}
+          onClick={handleLogin}
         >
           Login
         </Button>

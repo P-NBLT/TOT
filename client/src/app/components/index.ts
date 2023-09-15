@@ -5,3 +5,4 @@ export { default as Label } from "./label/label";
 export { default as Button } from "./button/button";
 export { default as Card } from "./card/card";
 export { default as CenterDiv } from "./div/center-div/centerDiv";
+export { default as Toast } from "./toast/toast";

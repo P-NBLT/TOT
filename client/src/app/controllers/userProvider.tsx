@@ -41,26 +41,32 @@ const UserProvider: React.FC<userProviderProps> = ({ children, ...props }) => {
     const response = await apiClient("auth/login/local", {
       data: { email, password },
       method: "POST",
+      rawResponse: true,
     });
+    const data = await response.json();
+
+    if (response.status === 401) {
+      return data;
+    }
 
     setUser({
-      id: response.user.id,
-      ...(response.user.username && { username: response.user.username }),
+      id: data.user.id,
+      ...(data.user.username && { username: data.user.username }),
       bot: false,
     });
 
     localStorage.setItem(
       "user",
       JSON.stringify({
-        id: response.user.id,
-        ...(response.user.username && { username: response.user.username }),
+        id: data.user.id,
+        ...(data.user.username && { username: data.user.username }),
         bot: false,
       })
     );
 
-    if (response.user.username) {
+    if (data.user.username) {
       router.push("/feed");
-    } else {
+    } else if (data.user) {
       router.push("/create-profile");
     }
   }
