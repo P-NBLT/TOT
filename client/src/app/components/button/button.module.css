@@ -47,6 +47,66 @@
   box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2.6px;
 }
 
+.navBar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80px;
+  background-color: transparent;
+  color: black;
+  opacity: 0.5;
+  border-radius: 0;
+}
+
+.navBar-noIcon {
+  border-radius: 0;
+}
+
+.navBar:hover,
+.navBar-noIcon:hover {
+  color: white;
+}
+
+.post-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 5px;
+  font-size: 14px;
+  width: 100%;
+  cursor: pointer;
+  text-align: center;
+  background-color: transparent;
+  color: grey;
+  border-radius: 0;
+  padding: 0;
+}
+
+.post-action:hover {
+  background-color: lightgray;
+}
+
+.commentary {
+  background-color: transparent;
+  color: grey;
+  border-radius: 0;
+  font-size: 12px;
+  padding: 0;
+}
+
+.commentary:hover {
+  color: blue;
+}
+
+@media screen and (min-width: 500px) {
+  .post-action {
+    column-gap: 5px;
+    font-size: 18px;
+    width: 100%;
+    padding: 10px;
+  }
+}
+
 /* size */
 
 .size-sm {
