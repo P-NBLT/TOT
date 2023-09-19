@@ -6,7 +6,7 @@ import { BsFillPeopleFill } from "react-icons/bs";
 import { IoMdSettings, IoMdLogOut } from "react-icons/io";
 import { RiNotification2Fill } from "react-icons/ri";
 import { AiFillMessage } from "react-icons/ai";
-import { useDetectDevice } from "@/app/hooks/useDeviceDetect";
+import { useDeviceDetect } from "@/app/hooks/useDeviceDetect";
 
 // for development only
 import pic from "@/assets/images/google.png";
@@ -16,7 +16,7 @@ type NavBarProps = {
 };
 
 const NavBar: React.FC<NavBarProps> = ({ type }) => {
-  const { isMobile } = useDetectDevice();
+  const { isMobile } = useDeviceDetect();
   return (
     <header className={navBarStyle.default}>
       {isMobile ? <PrivateMobile /> : <PrivateDesktop />}
