@@ -1,0 +1,35 @@
+@media screen and (min-width: 500px) {
+  .master {
+    display: grid;
+    grid-template-columns: minmax(0, 225px) fit-content(100%);
+    grid-template-areas: "sidebar main";
+
+    column-gap: 2.4rem;
+    width: fit-content;
+    margin: 0px auto;
+    padding: 10px 0 80px 0;
+  }
+
+  .sidebar {
+    grid-area: sidebar;
+  }
+
+  .main {
+    grid-area: main;
+    position: relative;
+  }
+
+  .aside {
+    grid-area: aside;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .master {
+    display: grid;
+    grid-template-areas: "sidebar main aside";
+    grid-template-columns: minmax(0, 225px) fit-content(100%) minmax(0, 300px);
+    column-gap: 2.4rem;
+    width: fit-content;
+  }
+}

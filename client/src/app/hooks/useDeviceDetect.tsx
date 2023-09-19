@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export const useDetectDevice = () => {
+export const useDeviceDetect = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isTablet, setIsTablet] = useState<boolean>(false);
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
