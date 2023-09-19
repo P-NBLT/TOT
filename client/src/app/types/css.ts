@@ -25,6 +25,7 @@ export enum CSS_PROPS_NAMES {
   height = "height",
   fontSize = "fontSize",
   bold = "bold",
+  zIndex = "zIndex",
   variant = "variant",
 }
 
@@ -50,6 +51,7 @@ export type CSS_PROPS_TYPES = {
   width?: string | number;
   height?: string | number;
   fontSize?: string | number; // 1 ; "1rem" ; "lg"
+  zIndex?: number;
   variant?: string;
 };
 
