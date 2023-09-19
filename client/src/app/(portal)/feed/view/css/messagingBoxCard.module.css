@@ -1,0 +1,75 @@
+.master,
+.leftContainer,
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.header {
+  justify-content: space-between;
+  width: 100%;
+}
+
+.master {
+  position: fixed;
+  flex-direction: column;
+  justify-content: center;
+
+  bottom: 0;
+  right: 0;
+  width: 288px;
+  background-color: rgba(240, 240, 240, 1);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 10px 5px 10px 5px;
+  transition: 0.3s ease;
+  border: 2px solid grey;
+}
+
+.master button {
+  background-color: rgba(192, 192, 192, 1);
+  border-radius: 50px !important;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+}
+.leftContainer {
+  cursor: pointer;
+}
+
+.messageContainer {
+  display: flex;
+  margin-top: 10px;
+  column-gap: 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.messageContainer > :nth-child(2) {
+  width: 100%;
+}
+
+.message-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.message-top > :last-child {
+  justify-self: flex-end;
+  font-size: 12px !important;
+}
+.rightContainer {
+  padding-bottom: 5px;
+  border-bottom: 1px solid grey;
+}
+
+.rightContainer > :last-child {
+  font-size: 14px;
+}
+
+.messageContainer:last-child > .rightContainer {
+  border: none;
+  padding-bottom: 0;
+}

@@ -1,6 +1,5 @@
 .default {
   padding: 6px 15px;
-  border-radius: 3px;
   border: none;
   border-radius: 15px;
   width: fit-content;
@@ -39,7 +38,6 @@
 
 .google {
   display: flex;
-
   width: 100%;
   border-radius: 0;
   background-color: #ffffff;
