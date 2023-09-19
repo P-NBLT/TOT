@@ -1,7 +1,13 @@
 import React from "react";
-import { Button, Card, Input, ProfilePic, Typography } from "..";
+import {
+  Button,
+  Card,
+  Input,
+  ProfilePic,
+  Typography,
+} from "../../../components";
 import Image, { StaticImageData } from "next/image";
-import postStyles from "./post.module.css";
+import postStyles from "./css/post.module.css";
 import { AiTwotoneLike } from "react-icons/ai";
 import { IoSend } from "react-icons/io5";
 import { BiCommentDetail, BiRepost } from "react-icons/bi";
