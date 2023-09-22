@@ -13,7 +13,7 @@ const ConversationFeed: React.FC = () => {
   const [messageQueue, setMessageQueue] = useState<any[]>(
     conversationObject[1]
   );
-  const [postMessageContent, setPostMessageContent] = useState<string>("");
+  const [messageContent, setMessageContent] = useState<string>("");
   const { displayHTMLMessage } = useDomPurify();
 
   function adjustHeight() {
@@ -66,20 +66,23 @@ const ConversationFeed: React.FC = () => {
   }, []);
 
   function registerMessage(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setPostMessageContent(e.target.value);
+    setMessageContent(e.target.value);
   }
 
   function addMessage() {
+    const body = bodyRef.current;
     const textArea = textRef.current;
     textArea!.value = "";
-    setPostMessageContent("");
+    setElementHeight(textArea, 40);
+    setElementHeight(body, 250);
+    setMessageContent("");
     setMessageQueue((prev) => [
       ...prev,
       {
         username: userData.username,
         profilePic: userData.profilePic,
         time: "2022-09-15T15:30:00Z",
-        content: postMessageContent,
+        content: messageContent,
       },
     ]);
     setTimeout(() => scrollToBottom(), 10);
@@ -122,7 +125,7 @@ const ConversationFeed: React.FC = () => {
       </div>
       <div className={conversationFeedModule.buttonContainer}>
         <Button
-          disabled={postMessageContent.length > 0 ? false : true}
+          disabled={messageContent.length > 0 ? false : true}
           onClick={addMessage}
           variant="primary"
           backgroundColor="black"
