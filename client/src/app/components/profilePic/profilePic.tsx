@@ -7,7 +7,14 @@ import { CSS_PROPS_TYPES } from "@/app/types/css";
 
 type ProfilePicProps = {
   source: string;
-  location: "profile" | "comment" | "engagement";
+  location:
+    | "profile"
+    | "comment"
+    | "engagement"
+    | "bubbleMessage"
+    | "inboxMessage";
+  dimension?: number;
+  className?: any;
 };
 
 const ProfilePic: React.FC<
@@ -16,8 +23,20 @@ const ProfilePic: React.FC<
   const { width } = useWindowSize();
   const classNames = cssClassAndStyleBuilder(props);
   const picDimensions = {
-    desktop: { profile: 80, comment: 40, engagement: 30 },
-    mobile: { profile: 35, comment: 35, engagement: 20 },
+    desktop: {
+      profile: 80,
+      comment: 40,
+      engagement: 30,
+      bubbleMessage: 32,
+      inboxMessage: 48,
+    },
+    mobile: {
+      profile: 35,
+      comment: 35,
+      engagement: 20,
+      bubbleMessage: 0,
+      inboxMessage: 0,
+    },
   };
   const picDevice = width! < 500 ? picDimensions.mobile : picDimensions.desktop;
   const imageWidth = picDevice[location];

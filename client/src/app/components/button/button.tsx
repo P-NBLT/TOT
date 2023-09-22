@@ -6,6 +6,7 @@ import { CSS_PROPS_TYPES } from "@/app/types/css";
 type props = {
   onClick?: React.MouseEventHandler<HTMLButtonElement | MouseEvent>;
   children: React.ReactNode;
+  disabled?: boolean;
 };
 
 type ButtonProps = props & CSS_PROPS_TYPES;

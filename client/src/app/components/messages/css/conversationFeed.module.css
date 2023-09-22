@@ -1,0 +1,65 @@
+.master {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.body {
+  width: 100%;
+  overflow-y: auto;
+}
+
+.header {
+  display: flex;
+  column-gap: 10px;
+  justify-content: flex-start;
+  padding-left: 60px;
+}
+
+.profilePic {
+  position: absolute;
+  top: 0;
+  border-radius: 50px;
+  left: 5px;
+}
+
+.messageContainer {
+  position: relative;
+  margin-top: 20px;
+}
+
+.content {
+  padding-left: 60px;
+}
+
+.textareaContainer {
+  width: 100%;
+}
+
+.textarea {
+  overflow-y: auto;
+  resize: none;
+  min-height: 40px;
+  max-height: 100px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 100%;
+  resize: none;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.break {
+  display: block;
+  height: 50px;
+  width: 100%;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 5px;
+  flex: 1;
+}
