@@ -1,91 +1,86 @@
-import { Button, ProfilePic, Typography } from "@/app/components";
-import React, { useState, useRef } from "react";
-import { userData, userMessages } from "@/app/(portal)/feed/view/mockup";
-import { AiOutlineArrowUp, AiOutlineArrowDown } from "react-icons/ai";
+import React, { useState } from "react";
 import messagingBoxStyle from "./css/messagingBoxCard.module.css";
+import { userMessages } from "./mockup";
+import InboxBubble from "@/app/components/messages/inboxBubble";
+import ConversationBubble from "@/app/components/messages/conversationBubble";
+import { useWindowSize } from "@/app/hooks/useWindowSize";
+
+type Conversation = {
+  username: string;
+  id: string;
+  profilePic: string;
+  open: boolean;
+};
 
 const MessagingBoxCard: React.FC = () => {
-  const [isExpended, setIsExpended] = useState<boolean>(false);
-  const [messagingBoxHeight, setMessagingBoxHeight] = useState<number>(52);
-  const messagingBoxRef = useRef(null);
-  function handleExpand() {
-    if (typeof window !== "undefined" && !isExpended) {
-      const maxHeight = window.innerHeight * 0.8;
-      //@ts-ignore
-      const contentHeight = messagingBoxRef.current?.scrollHeight;
-      setIsExpended(!isExpended);
+  const [conversationBubbles, setConversationBubbles] = useState<
+    Conversation[]
+  >([]);
+  const { width } = useWindowSize();
 
-      setMessagingBoxHeight(52 + Math.min(maxHeight, contentHeight));
+  function expandConversation(id: string) {
+    setConversationBubbles((prevConversation) =>
+      prevConversation.map((conversation) => {
+        if (conversation.id === id)
+          return { ...conversation, open: !conversation.open };
+        else return conversation;
+      })
+    );
+    return;
+  }
+
+  function addConversationToQueue(message: any) {
+    const isAlreadyOpen = conversationBubbles.findIndex(
+      (conversation: any) => conversation.id === message.id
+    );
+    if (isAlreadyOpen !== -1) {
+      setConversationBubbles((prev) => {
+        const copy = [...prev];
+        copy[isAlreadyOpen] = { ...copy[isAlreadyOpen], open: true };
+        return copy;
+      });
+      return;
+    }
+    const conversation = {
+      username: message.contactName,
+      id: message.id,
+      profilePic: message.profilePic,
+      open: true,
+    };
+    const maxConversationDisplay = width! > 1200 ? 3 : 2;
+    if (conversationBubbles.length < maxConversationDisplay) {
+      //@ts-ignore
+      setConversationBubbles((prev) => [...prev, conversation]);
     } else {
-      setMessagingBoxHeight(52);
-      setIsExpended(!isExpended);
+      const copy = [...conversationBubbles];
+      copy.shift();
+      setConversationBubbles([...copy, conversation]);
     }
   }
 
-  return (
-    <div
-      className={messagingBoxStyle.master}
-      style={{ height: messagingBoxHeight }}
-    >
-      <div className={messagingBoxStyle.header}>
-        <div className={messagingBoxStyle.leftContainer} onClick={handleExpand}>
-          <ProfilePic location="comment" source={userData.profilePic.src} />
-          <Typography color="black" marginLeft={5}>
-            Messaging
-          </Typography>
-        </div>
-        <Button onClick={handleExpand}>
-          {isExpended ? (
-            <AiOutlineArrowDown style={{ width: 15, height: 15 }} />
-          ) : (
-            <AiOutlineArrowUp style={{ width: 15, height: 15 }} />
-          )}
-        </Button>
-      </div>
+  function handleCloseConversation(id: string) {
+    setConversationBubbles((prev) => [
+      ...prev.filter((conversation) => conversation.id !== id),
+    ]);
+  }
 
-      <div
-        ref={messagingBoxRef}
-        style={{
-          //@ts-ignore
-          width: "100%",
-          ...(!isExpended
-            ? {
-                visibility: "hidden",
-                position: "absolute",
-                width: "100%",
-                height: "auto",
-                overflow: "hidden",
-                opacity: 0,
-                zIndex: -1,
-              }
-            : {
-                visibility: "visible",
-                position: "relative",
-                opacity: 1,
-                zIndex: "auto",
-                overflow: "auto",
-                borderTop: "1px solid grey",
-                marginTop: 10,
-              }),
-        }}
-      >
-        {userMessages.map((message, idx) => (
-          <div key={idx} className={messagingBoxStyle.messageContainer}>
-            <ProfilePic location="comment" source={message.contactPic.src} />
-            <div className={messagingBoxStyle.rightContainer}>
-              <div className={messagingBoxStyle["message-top"]}>
-                <Typography color="black">{message.contactName}</Typography>
-                <Typography color="grey">{message.timestamp}</Typography>
-              </div>
-              <Typography color="grey">
-                {message.content.length > 40
-                  ? message.content.slice(0, 60).concat("...")
-                  : message.content}
-              </Typography>
-            </div>
-          </div>
-        ))}
-      </div>
+  return (
+    <div className={messagingBoxStyle.conversationsQueueContainer}>
+      <aside className={messagingBoxStyle.conversationOverlayContainer}>
+        <InboxBubble
+          messages={userMessages}
+          addConversationToQueue={addConversationToQueue}
+        />
+        {conversationBubbles &&
+          conversationBubbles.map((conversation, idx) => (
+            <ConversationBubble
+              expandConversation={expandConversation}
+              handleCloseConversation={handleCloseConversation}
+              contactData={conversation}
+              key={conversation.id}
+            />
+          ))}
+      </aside>
     </div>
   );
 };
