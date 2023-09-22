@@ -3,12 +3,18 @@ import cors from "cors";
 import { createServer } from "http";
 import appRouter from "./routes/index.js";
 import { initializePassport, serializePassport } from "./passport/passport.js";
+import { createServer as createIoServer } from "./io.js";
 
 export function createHttpServer() {
   const app = express();
   const httpServer = createServer(app);
-
-  app.use(cors({ credentials: true }));
+  createIoServer(httpServer);
+  app.use(
+    cors({
+      credentials: true,
+      origin: ["http://localhost:3000"],
+    })
+  );
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   initializePassport(app);
