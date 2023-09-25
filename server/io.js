@@ -1,4 +1,6 @@
 import { Server } from "socket.io";
+import { EVENTS_LISTENER } from "./services/socket/events.js";
+import { initUser, socketAuthenticate } from "./services/socket/index.js";
 
 export function createServer(
   httpServer,
@@ -23,5 +25,11 @@ export function createServer(
 
   io.use((socket, next) => {
     passportMiddleware.session(socket.request, socket.request.res || {}, next);
+  });
+
+  io.on(EVENTS_LISTENER.connect, async (socket) => {
+    console.log("SOCKET Working", socket.id);
+    const user = await socketAuthenticate(socket);
+    user && initUser(socket, user);
   });
 }

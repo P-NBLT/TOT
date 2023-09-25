@@ -31,10 +31,10 @@ const Profile = {
   findProfileByUserID: async function findProfileByID(userID, selectOption) {
     try {
       let optionReturnedColumn = selectOptionsHandler(selectOption);
-      const query = `SELECT ${optionReturnedColumn}
-      FROM profile
-      WHERE user_id = $1;`;
       const values = [userID];
+
+      const query = `SELECT users.id, profile.username, profile.bot FROM users, profile
+      WHERE users.id = $1 AND users.id = profile.user_id;`;
 
       const response = await executeQuery(query, values);
 
@@ -54,6 +54,16 @@ const Profile = {
       return profiles;
     } catch (err) {
       return { success: false, errorMessage: err.message };
+    }
+  },
+  isBot: async function checkForBot(userId) {
+    try {
+      const query = `SELECT user_id, bot FROM profile WHERE user_id = $1`;
+      const value = [userId];
+      const response = await executeQuery(query, value);
+      return response[0].bot;
+    } catch (e) {
+      console.log(e);
     }
   },
 };

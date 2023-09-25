@@ -70,6 +70,17 @@ const Chat = {
       return false; // meaning both users don't have their own single room
     } else return true;
   },
+  retrieveUsersId: async function (userId, roomId) {
+    try {
+      const query = `SELECT user_id FROM users_chats WHERE chat_id = $2 AND user_id != $1;`;
+      const values = [userId, roomId];
+      const response = await executeQuery(query, values);
+      console.log("USER IDS", response);
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };
 
 export default Chat;
