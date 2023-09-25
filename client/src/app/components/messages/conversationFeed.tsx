@@ -1,11 +1,16 @@
-import React, { useRef, useEffect, useState, SyntheticEvent } from "react";
-import { Button, Input, ProfilePic, Typography } from "..";
+import React, { useRef, useEffect, useState } from "react";
+import { Button, ProfilePic, Typography } from "..";
 import conversationFeedModule from "./css/conversationFeed.module.css";
 import { conversationObject } from "@/app/(portal)/feed/view/mockup";
 import { userData } from "@/app/(portal)/feed/view/mockup";
 import { useDomPurify } from "@/app/hooks/useDomPurify";
+import { useRoomSocket } from "@/app/hooks/socket/useRoomSocket";
+import { formatTime } from "@/app/utils/date";
+import { SOCKETS_EMITTERS } from "@/socket/socketEvents";
+// to delete
+import yoda from "@/assets/images/yoda-profile-pic.jpeg";
 
-const ConversationFeed: React.FC = () => {
+const ConversationFeed: React.FC<{ roomId: string }> = ({ roomId }) => {
   const textRef = useRef<HTMLTextAreaElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const [textareaHeight, setTextareaHeight] = useState<number>(40);
@@ -15,6 +20,7 @@ const ConversationFeed: React.FC = () => {
   );
   const [messageContent, setMessageContent] = useState<string>("");
   const { displayHTMLMessage } = useDomPurify();
+  const { newMessage, socket, sendMessageToServer } = useRoomSocket(roomId);
 
   function adjustHeight() {
     const textArea = textRef.current;
@@ -62,8 +68,24 @@ const ConversationFeed: React.FC = () => {
 
     return () => {
       textarea.removeEventListener("input", adjustHeight);
+      socket.emit(SOCKETS_EMITTERS.LEAVE_ROOM, roomId);
     };
   }, []);
+
+  useEffect(() => {
+    if (newMessage) {
+      setMessageQueue((prev) => [
+        ...prev,
+        {
+          username: "Yoda",
+          time: newMessage.timestamp,
+          profilePic: yoda,
+          content: newMessage.message,
+        },
+      ]);
+      setTimeout(() => scrollToBottom(), 10);
+    }
+  }, [newMessage]);
 
   function registerMessage(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setMessageContent(e.target.value);
@@ -75,16 +97,18 @@ const ConversationFeed: React.FC = () => {
     textArea!.value = "";
     setElementHeight(textArea, 40);
     setElementHeight(body, 250);
-    setMessageContent("");
     setMessageQueue((prev) => [
       ...prev,
       {
         username: userData.username,
         profilePic: userData.profilePic,
-        time: "2022-09-15T15:30:00Z",
+        time: new Date().toISOString(),
         content: messageContent,
       },
     ]);
+
+    sendMessageToServer(messageContent);
+    setMessageContent("");
     setTimeout(() => scrollToBottom(), 10);
   }
 
@@ -104,7 +128,7 @@ const ConversationFeed: React.FC = () => {
             />
             <div className={conversationFeedModule.header}>
               <Typography>{message.username}</Typography>
-              <Typography fontSize={12}>{message.time}</Typography>
+              <Typography fontSize={12}>{formatTime(message.time)}</Typography>
             </div>
             {displayHTMLMessage(message.content, {
               color: "black",
