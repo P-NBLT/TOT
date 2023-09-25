@@ -38,7 +38,7 @@ const MessageHeader: React.FC<MessageHeaderProps> = ({
       )}
       {view === "room" && (
         // @ts-ignore
-        <Button onClick={() => handleCloseConversation(userData.id)}>
+        <Button onClick={() => handleCloseConversation(userData.roomId)}>
           <RxCross2 style={{ width: 15, height: 15 }} />
         </Button>
       )}

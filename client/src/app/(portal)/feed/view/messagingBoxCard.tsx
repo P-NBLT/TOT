@@ -7,7 +7,7 @@ import { useWindowSize } from "@/app/hooks/useWindowSize";
 
 type Conversation = {
   username: string;
-  id: string;
+  roomId: string;
   profilePic: string;
   open: boolean;
 };
@@ -18,10 +18,10 @@ const MessagingBoxCard: React.FC = () => {
   >([]);
   const { width } = useWindowSize();
 
-  function expandConversation(id: string) {
+  function expandConversation(roomId: string) {
     setConversationBubbles((prevConversation) =>
       prevConversation.map((conversation) => {
-        if (conversation.id === id)
+        if (conversation.roomId === roomId)
           return { ...conversation, open: !conversation.open };
         else return conversation;
       })
@@ -31,7 +31,7 @@ const MessagingBoxCard: React.FC = () => {
 
   function addConversationToQueue(message: any) {
     const isAlreadyOpen = conversationBubbles.findIndex(
-      (conversation: any) => conversation.id === message.id
+      (conversation: any) => conversation.roomId === message.roomId
     );
     if (isAlreadyOpen !== -1) {
       setConversationBubbles((prev) => {
@@ -41,9 +41,10 @@ const MessagingBoxCard: React.FC = () => {
       });
       return;
     }
+
     const conversation = {
       username: message.contactName,
-      id: message.id,
+      roomId: message.roomId,
       profilePic: message.profilePic,
       open: true,
     };
@@ -58,9 +59,9 @@ const MessagingBoxCard: React.FC = () => {
     }
   }
 
-  function handleCloseConversation(id: string) {
+  function handleCloseConversation(roomId: string) {
     setConversationBubbles((prev) => [
-      ...prev.filter((conversation) => conversation.id !== id),
+      ...prev.filter((conversation) => conversation.roomId !== roomId),
     ]);
   }
 
@@ -77,7 +78,7 @@ const MessagingBoxCard: React.FC = () => {
               expandConversation={expandConversation}
               handleCloseConversation={handleCloseConversation}
               contactData={conversation}
-              key={conversation.id}
+              key={conversation.roomId}
             />
           ))}
       </aside>
