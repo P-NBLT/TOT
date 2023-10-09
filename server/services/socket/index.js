@@ -1,5 +1,6 @@
 import { EVENTS_LISTENER, EVENTS_EMITTERS } from "./events.js";
 import Message from "../../models/Message.js";
+import * as messageServices from "../message.service.js";
 import Chat from "../../models/Chat.js";
 import Profile from "../../models/Profile.js";
 
@@ -20,9 +21,12 @@ export async function initUser(socket, user) {
     console.log("socket disconnected", reason);
   });
 
-  socket.on(EVENTS_LISTENER.joinRoom, (roomId) => {
+  socket.on(EVENTS_LISTENER.joinRoom, async (roomId, cb) => {
     console.log("joined room", roomId);
     socket.join(roomId);
+    const messages = await messageServices.getMessagesByRoomId(roomId);
+    cb(messages);
+    return;
   });
 
   socket.on(EVENTS_LISTENER.leaveRoom, (roomId) => {
@@ -34,7 +38,7 @@ export async function initUser(socket, user) {
   socket.on(EVENTS_LISTENER.incommingMessage, async (message, roomId, cb) => {
     const storedMessage = await Message.storeMessage(message, userId, roomId);
     console.log("stored message", storedMessage);
-    const recipients = await Chat.retrieveUsersId(76, roomId);
+    const recipients = await Chat.retrieveUsersId(userId, roomId);
 
     if (recipients.length === 1) {
       await sendPrivateMessage({
@@ -65,10 +69,12 @@ async function sendPrivateMessage({
   const isBot = await Profile.isBot(recipientId);
   //if bot => use botManager and send the response back. this will be implemented from a different branch
   if (isBot) {
-    cb("Bot response", timestamp);
+    cb("Bot response", timestamp, isBot.username, recipientId);
     return;
   }
   // else
-  socket.to(roomId).emit(EVENTS_EMITTERS.sendMessage, message, timestamp);
+  socket
+    .to(roomId)
+    .emit(EVENTS_EMITTERS.sendMessage, message, recipientId, timestamp);
   return;
 }
