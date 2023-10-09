@@ -19,4 +19,8 @@ router.post(
   chatContoller.createGroopRoom
 );
 
+router.get("/user/:userId/rooms/recent", chatContoller.getRecentActiveChats);
+
+router.get("/user/:userId/rooms", chatContoller.getAllRoomsByUser);
+
 export default router;

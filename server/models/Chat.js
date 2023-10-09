@@ -81,6 +81,83 @@ const Chat = {
       console.log(e);
     }
   },
+  getAllRoomsByUserId: async function getAllRoomsByUserId(userId, limit = 1) {
+    try {
+      const query = `SELECT c.*
+    FROM users_chats AS uc
+    JOIN chats AS c ON uc.chat_id = c.chat_id
+    WHERE uc.user_id = $1
+    ORDER BY c.last_activity DESC
+    LIMIT 15 * $2;`;
+
+      const value = [userId, limit];
+
+      const response = await executeQuery(query, value);
+      return response;
+    } catch (e) {
+      return e;
+    }
+  },
+  getUserChatDetailsWithLastMessages:
+    async function getUserChatDetailsWithLastMessages(userId, offset = 0) {
+      try {
+        const query = `WITH Friends AS (
+          SELECT
+              CASE
+                  WHEN f.requester_id = $1 THEN f.addressee_id
+                  ELSE f.requester_id
+              END as friend_id
+          FROM friendship f
+          WHERE f.requester_id = $1 
+      ),
+      UserAChats AS (
+        SELECT chat_id
+        FROM users_chats
+        WHERE user_id = $1
+      ),
+      LastMessages AS (
+          SELECT
+              m.chat_id,
+              m.created_at,
+              m.message,
+              m.user_id
+          FROM messages m
+          INNER JOIN (
+              SELECT
+                  chat_id,
+                  MAX(created_at) as last_message_time
+              FROM messages
+              GROUP BY chat_id
+          ) lm ON m.chat_id = lm.chat_id AND m.created_at = lm.last_message_time
+      )
+      SELECT
+          p.username as "contactName",
+          p.affinity_name as affinity,
+          p.side,
+          uc.chat_id as "roomId",
+          c.last_activity as "timestamp",
+          lm.message as content
+      FROM Friends f
+      INNER JOIN profile p ON f.friend_id = p.user_id
+      LEFT JOIN users_chats uc ON f.friend_id = uc.user_id AND uc.chat_id IN (SELECT chat_id FROM UserAChats)
+      LEFT JOIN chats c ON uc.chat_id = c.chat_id
+      LEFT JOIN LastMessages lm ON c.chat_id = lm.chat_id
+      WHERE lm.message IS NOT NULL
+      ORDER BY c.last_activity DESC NULLS LAST
+      LIMIT 10 
+      OFFSET $2;`;
+
+        const values = [userId, offset];
+
+        const response = await executeQuery(query, values);
+
+        if (response.length > 0) return { success: true, data: response };
+        else return { success: true, data: [], message: "no result found" };
+      } catch (e) {
+        console.log(e);
+        return { success: false, data: null };
+      }
+    },
 };
 
 export default Chat;
