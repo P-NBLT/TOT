@@ -1,26 +1,28 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Button, ProfilePic, Typography } from "..";
 import conversationFeedModule from "./css/conversationFeed.module.css";
-import { conversationObject } from "@/app/(portal)/feed/view/mockup";
 import { userData } from "@/app/(portal)/feed/view/mockup";
 import { useDomPurify } from "@/app/hooks/useDomPurify";
 import { useRoomSocket } from "@/app/hooks/socket/useRoomSocket";
 import { formatTime } from "@/app/utils/date";
 import { SOCKETS_EMITTERS } from "@/socket/socketEvents";
 // to delete
-import yoda from "@/assets/images/yoda-profile-pic.jpeg";
+import avatarPic from "@/assets/images/avatar.png";
+import { useUser } from "@/app/controllers/userProvider";
 
 const ConversationFeed: React.FC<{ roomId: string }> = ({ roomId }) => {
   const textRef = useRef<HTMLTextAreaElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const [textareaHeight, setTextareaHeight] = useState<number>(40);
   const [bodyHeight, setBodyHeight] = useState<number>(250);
-  const [messageQueue, setMessageQueue] = useState<any[]>(
-    conversationObject[1]
+  const { chatHistory, newMessage, isLoading, socket, sendMessageToServer } =
+    useRoomSocket(roomId);
+  const [messageQueue, setMessageQueue] = useState<any[] | []>(
+    chatHistory || []
   );
   const [messageContent, setMessageContent] = useState<string>("");
+  const { user } = useUser();
   const { displayHTMLMessage } = useDomPurify();
-  const { newMessage, socket, sendMessageToServer } = useRoomSocket(roomId);
 
   function adjustHeight() {
     const textArea = textRef.current;
@@ -77,15 +79,21 @@ const ConversationFeed: React.FC<{ roomId: string }> = ({ roomId }) => {
       setMessageQueue((prev) => [
         ...prev,
         {
-          username: "Yoda",
+          username: newMessage.username,
           time: newMessage.timestamp,
-          profilePic: yoda,
+          profilePic: avatarPic,
           content: newMessage.message,
         },
       ]);
       setTimeout(() => scrollToBottom(), 10);
     }
   }, [newMessage]);
+  useEffect(() => {
+    if (chatHistory) {
+      setMessageQueue(chatHistory);
+      setTimeout(() => scrollToBottom(), 10);
+    }
+  }, [chatHistory]);
 
   function registerMessage(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setMessageContent(e.target.value);
@@ -100,7 +108,7 @@ const ConversationFeed: React.FC<{ roomId: string }> = ({ roomId }) => {
     setMessageQueue((prev) => [
       ...prev,
       {
-        username: userData.username,
+        username: user!.username,
         profilePic: userData.profilePic,
         time: new Date().toISOString(),
         content: messageContent,
@@ -119,23 +127,31 @@ const ConversationFeed: React.FC<{ roomId: string }> = ({ roomId }) => {
         ref={bodyRef}
         style={{ height: `${bodyHeight}px` }}
       >
-        {messageQueue.map((message, idx) => (
-          <div className={conversationFeedModule.messageContainer} key={idx}>
-            <ProfilePic
-              location="comment"
-              source={message.profilePic.src}
-              className={conversationFeedModule.profilePic}
-            />
-            <div className={conversationFeedModule.header}>
-              <Typography>{message.username}</Typography>
-              <Typography fontSize={12}>{formatTime(message.time)}</Typography>
+        {isLoading ? (
+          <p>Loading Messages</p>
+        ) : messageQueue.length === 0 ? (
+          <p>Beginning of the conversation</p>
+        ) : (
+          messageQueue.map((message, idx) => (
+            <div className={conversationFeedModule.messageContainer} key={idx}>
+              <ProfilePic
+                location="comment"
+                source={message.profilePic?.src || avatarPic}
+                className={conversationFeedModule.profilePic}
+              />
+              <div className={conversationFeedModule.header}>
+                <Typography>{message.username}</Typography>
+                <Typography fontSize={12}>
+                  {formatTime(message.time)}
+                </Typography>
+              </div>
+              {displayHTMLMessage(message.content, {
+                color: "black",
+                paddingLeft: 60,
+              })}
             </div>
-            {displayHTMLMessage(message.content, {
-              color: "black",
-              paddingLeft: 60,
-            })}
-          </div>
-        ))}
+          ))
+        )}
         <span className={conversationFeedModule.break}></span>
       </div>
       <div className={conversationFeedModule.textareaContainer}>
