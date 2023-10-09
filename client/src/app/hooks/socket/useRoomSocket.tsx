@@ -5,12 +5,32 @@ import { SOCKETS_EMITTERS, SOCKET_LISTENNER } from "@/socket/socketEvents";
 
 export const useRoomSocket = (roomId: string) => {
   const [newMessage, setNewMessage] = useState<
-    { message: string; timestamp: string } | undefined
+    | { message: string; timestamp: string; username: string; userId: string }
+    | undefined
   >();
+  const [chatHistory, setChatHistory] = useState<
+    | { message: string; timestamp: string; username: string; userId: string }[]
+    | undefined
+  >();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { socket } = useSocket();
 
   useEffect(() => {
-    socket.emit(SOCKETS_EMITTERS.JOIN_ROOM, roomId);
+    socket.emit(
+      SOCKETS_EMITTERS.JOIN_ROOM,
+      roomId,
+      (
+        chatHistory: {
+          message: string;
+          timestamp: string;
+          username: string;
+          userId: string;
+        }[]
+      ) => {
+        setChatHistory(chatHistory);
+        setIsLoading(false);
+      }
+    );
 
     socket.on(SOCKET_LISTENNER.LISTEN_MESSAGE, (message, roomId) => {
       setNewMessage(message);
@@ -22,11 +42,16 @@ export const useRoomSocket = (roomId: string) => {
       SOCKETS_EMITTERS.SEND_MESSAGE,
       message,
       roomId,
-      (message: string, timestamp: string) => {
-        if (message) setNewMessage({ message, timestamp });
+      (
+        message: string,
+        timestamp: string,
+        username: string,
+        userId: string
+      ) => {
+        if (message) setNewMessage({ message, timestamp, username, userId });
       }
     );
   }
 
-  return { newMessage, socket, sendMessageToServer };
+  return { chatHistory, newMessage, isLoading, socket, sendMessageToServer };
 };
