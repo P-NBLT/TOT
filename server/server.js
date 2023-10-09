@@ -18,6 +18,7 @@ export function createHttpServer() {
     cors({
       credentials: true,
       origin: ["http://localhost:3000"],
+      exposedHeaders: ["ETag"],
     })
   );
   app.use(express.json());

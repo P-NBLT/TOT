@@ -4,7 +4,14 @@ import * as profileController from "../controllers/profile.controller.js";
 
 const router = express.Router();
 
-router.get("/", authMiddleware.isLoggedIn, profileController.getUsersProfile);
+router.get(
+  "/users",
+  authMiddleware.isLoggedIn,
+  profileController.getUsersProfile
+);
+
+router.get("/preview", profileController.getPreviewProfileData);
+
 router.get(
   "/:userId",
   authMiddleware.isLoggedIn,
