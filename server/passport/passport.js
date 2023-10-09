@@ -44,6 +44,8 @@ export function serializePassport() {
         id: user.id,
         email: user.email,
         username: user.username,
+        side: user.side,
+        faction: user.faction,
       });
     });
   });

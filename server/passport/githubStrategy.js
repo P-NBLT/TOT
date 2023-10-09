@@ -1,5 +1,6 @@
 import { Strategy as githubStrategy } from "passport-github2";
 import { config } from "../config/index.js";
+import { getProfile } from "./helper.js";
 
 function initialize(passport, User) {
   const clientID = config.GITHUB_CLIENT_ID;
@@ -14,7 +15,7 @@ function initialize(passport, User) {
         callbackURL,
       },
       async function (accessToken, refreshToken, profile, done) {
-        const newUser = await User.createOrFindOauth({
+        let user = await User.createOrFindOauth({
           id: profile._json.id,
           email: profile._json.email,
           provider: "Github",
@@ -22,8 +23,9 @@ function initialize(passport, User) {
           refreshToken,
         });
 
-        if (newUser.success === false || undefined) done(newUser.errMessage);
-        done(null, newUser);
+        if (user.success === false || undefined) done(user.errMessage);
+        user = { ...user, ...(await getProfile(user)) };
+        done(null, user);
       }
     )
   );

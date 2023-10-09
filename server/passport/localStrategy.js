@@ -1,13 +1,13 @@
 import LocalStrategy from "passport-local";
 import bcrypt from "bcrypt";
-import Profile from "../models/Profile.js";
+import { getProfile } from "./helper.js";
 
 function initialize(passport, User) {
   passport.use(
     new LocalStrategy(
       { usernameField: "email", passwordField: "password" },
       async function verify(email, password, done) {
-        const user = await User.findUserByEmail(email);
+        let user = await User.findUserByEmail(email);
 
         if (user.success === false) return done(user.errorMessage);
         if (!user) {
@@ -30,14 +30,8 @@ function initialize(passport, User) {
             message: "Invalid email or password",
           });
 
-        const profile = await Profile.findProfileByUserID(user.id, [
-          "username",
-        ]);
-
-        if (profile) {
-          user.username = profile.username;
-          return done(null, user);
-        } else return done(null, user);
+        user = { ...user, ...(await getProfile(user)) };
+        return done(null, user);
       }
     )
   );

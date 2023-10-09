@@ -33,7 +33,7 @@ const Profile = {
       let optionReturnedColumn = selectOptionsHandler(selectOption);
       const values = [userID];
 
-      const query = `SELECT users.id, profile.username, profile.bot FROM users, profile
+      const query = `SELECT users.id, profile.username, profile.bot, profile.side, profile.affinity_name FROM users, profile
       WHERE users.id = $1 AND users.id = profile.user_id;`;
 
       const response = await executeQuery(query, values);
@@ -58,9 +58,10 @@ const Profile = {
   },
   isBot: async function checkForBot(userId) {
     try {
-      const query = `SELECT user_id, bot FROM profile WHERE user_id = $1`;
+      const query = `SELECT user_id, bot, username FROM profile WHERE user_id = $1`;
       const value = [userId];
       const response = await executeQuery(query, value);
+      if (response.length === 0) return false;
       return response[0].bot;
     } catch (e) {
       console.log(e);
