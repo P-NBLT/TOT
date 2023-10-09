@@ -129,9 +129,7 @@ const UserProvider: React.FC<userProviderProps> = ({ children, ...props }) => {
   useEffect(() => {
     async function getUserData() {
       let userData = await getProfile(true);
-      if (!userData) userData = await getProfile();
-      console.log("userdata", userData);
-
+      if (!userData) userData = await getProfile(); // caching mechanism in futur branch
       if (userData) {
         setUser((prev) => (prev = { ...prev, ...userData.user }));
       }

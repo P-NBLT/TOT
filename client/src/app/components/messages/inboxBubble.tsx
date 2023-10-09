@@ -69,7 +69,7 @@ const InboxBubble: React.FC<InboxBubbleProps> = ({
       setIsExpended(!isExpended);
     }
   }
-  console.log("user obj", user);
+
   useEffect(() => {
     if (messagingBoxRef.current) {
       if (isInboxFeed) {
@@ -87,7 +87,6 @@ const InboxBubble: React.FC<InboxBubbleProps> = ({
   function handleSearch(e: any) {
     const query = e.target.value;
     debounce(async (item) => {
-      console.log("I am debouncing", item);
       if (item === "") {
         setSearchResultsConnection([]);
         setSearchResultsMessage([]);
