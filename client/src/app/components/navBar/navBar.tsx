@@ -1,7 +1,6 @@
 import React from "react";
-import { Button, Input, ProfilePic, Typography } from "..";
+import { Button, ProfilePic, Typography, SearchBar } from "..";
 import navBarStyle from "./navBar.module.css";
-import { FaSearch } from "react-icons/fa";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { IoMdSettings, IoMdLogOut } from "react-icons/io";
 import { RiNotification2Fill } from "react-icons/ri";
@@ -33,15 +32,7 @@ const PrivateDesktop: React.FC = () => {
         <Typography color="white" fontSize={24}>
           Tales Of Tatooine
         </Typography>
-        <div className={navBarStyle.searchContainer}>
-          <FaSearch width={25} className={navBarStyle.searchIcon} />
-          <Input
-            id="search"
-            placeholder="Search"
-            padding={"5px 0 5px 25px"}
-            className={navBarStyle.input}
-          />
-        </div>
+        <SearchBar variant={"navbar"} />
       </div>
       <div className={navBarStyle.leftContainer}>
         <Button variant="navBar">
@@ -69,15 +60,7 @@ const PrivateMobile: React.FC = ({}) => {
     <div className={navBarStyle.content}>
       <div className={navBarStyle.rightContainer}>
         <ProfilePic source={pic.src} location="profile" />
-        <div className={navBarStyle.searchContainer}>
-          <FaSearch width={25} className={navBarStyle.searchIcon} />
-          <Input
-            id="search"
-            placeholder="Search"
-            padding={"5px 0 5px 25px"}
-            className={navBarStyle.input}
-          />
-        </div>
+        <SearchBar />
       </div>
       <div className={navBarStyle.leftContainer}>
         <Button variant="navBar">

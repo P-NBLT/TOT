@@ -12,6 +12,8 @@ type props = {
   id: string;
   className?: any;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onFocus?: React.FocusEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
 };
 
 type inputProps = props & Omit<CSS_PROPS_TYPES, "size">;
