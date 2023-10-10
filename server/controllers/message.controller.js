@@ -1,4 +1,5 @@
 import Message from "../models/Message.js";
+import * as messageServices from "../services/message.service.js";
 
 export async function sendMessageToBot(req, res) {
   const { message, sender_id, recipient_id, chat_id } = req.body;
@@ -32,5 +33,20 @@ export async function sendMessageToUser(req, res) {
     return res
       .status(501)
       .json({ message: "something went wrong", err: err.message });
+  }
+}
+
+export async function getMessagesByRoomId(req, res) {
+  try {
+    const { roomId } = req.params;
+    const { offset } = req.query;
+
+    const messages = await messageServices.getMessagesByRoomId(roomId, offset);
+
+    return res.status(200).json(messages);
+  } catch (e) {
+    return res
+      .status(501)
+      .json({ success: false, message: "Something went wrong." });
   }
 }

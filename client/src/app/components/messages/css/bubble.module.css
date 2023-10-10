@@ -40,6 +40,8 @@
   overflow: auto;
   border-top: 1px solid grey;
   margin-top: 10;
+  width: 100%;
+  flex: 1;
 }
 .inboxContainer-hidden {
   visibility: hidden;

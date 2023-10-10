@@ -21,7 +21,7 @@ const ProfilePic: React.FC<
   ProfilePicProps & Omit<CSS_PROPS_TYPES, "height" | "width">
 > = ({ source, location, ...props }) => {
   const { width } = useWindowSize();
-  const classNames = cssClassAndStyleBuilder(props);
+  cssClassAndStyleBuilder(props);
   const picDimensions = {
     desktop: {
       profile: 80,
@@ -40,7 +40,7 @@ const ProfilePic: React.FC<
   };
   const picDevice = width! < 500 ? picDimensions.mobile : picDimensions.desktop;
   const imageWidth = picDevice[location];
-  console.log("width", imageWidth);
+
   return (
     <Image
       alt="profile picture"

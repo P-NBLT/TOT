@@ -4,11 +4,11 @@ import bubbleStyle from "./css/bubble.module.css";
 import ConversationFeed from "./conversationFeed";
 
 type ConversationBubbleProps = {
-  expandConversation?: (id: string) => void;
-  handleCloseConversation: (id: string) => void;
+  expandConversation?: (roomId: string) => void;
+  handleCloseConversation: (roomId: string) => void;
   contactData: {
     username: string;
-    id: string;
+    roomId: string;
     profilePic: string;
     open: boolean;
   };
@@ -26,7 +26,7 @@ const ConversationBubble: React.FC<ConversationBubbleProps> = ({
     if (typeof window !== "undefined") {
       setIsExpended(!isExpended);
       setMessagingBoxHeight(isExpended ? 52 : 400);
-      expandConversation!(contactData.id);
+      expandConversation!(contactData.roomId);
     }
   }
   useEffect(() => {
@@ -59,7 +59,7 @@ const ConversationBubble: React.FC<ConversationBubbleProps> = ({
           ]
         }
       >
-        <ConversationFeed />
+        <ConversationFeed roomId={contactData.roomId} />
       </div>
     </div>
   );

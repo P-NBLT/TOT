@@ -10,6 +10,7 @@ type ApiClientPayload = {
   cache?: RequestCache;
   "Cache-Control"?: any;
   Cookie?: string;
+  etag?: string;
   next?: { tags: string[] };
 };
 
@@ -24,6 +25,7 @@ export async function apiClient(
     cache,
     "Cache-Control": cacheControl,
     Cookie,
+    etag,
   }: ApiClientPayload = {}
 ) {
   const options: RequestInit = {
@@ -34,6 +36,7 @@ export async function apiClient(
     headers: {
       ...(data && { "Content-Type": "application/json" }),
       "Cache-Control": cacheControl,
+      ...(etag && { "If-None-Match": localStorage.getItem(etag) || "" }),
       Cookie,
       ...headers,
     },
@@ -44,6 +47,15 @@ export async function apiClient(
   const response = await fetch(`${URL}${endPoint}`, options);
   if (rawResponse) {
     return response;
+  }
+
+  if (etag) {
+    if (response.status === 304) return null;
+    else {
+      localStorage.setItem(etag, response.headers.get("Etag")!);
+      const json = await response.json();
+      return json;
+    }
   }
 
   if (response.status === 205) {

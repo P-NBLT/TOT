@@ -1,4 +1,5 @@
 import Profile from "../models/Profile.js";
+import etag from "etag";
 
 export async function createUserProfile(req, res) {
   const { username, affinity, side } = req.body;
@@ -26,7 +27,7 @@ export async function getUserProfile(req, res) {
   try {
     const { userId } = req.params;
     const userProfile = await Profile.findProfileByUserID(userId, [
-      "username, bot",
+      "username, bot, id",
     ]);
     if (userProfile) return res.status(200).json(userProfile);
     else
@@ -57,4 +58,32 @@ export async function getUsersProfile(req, res) {
       .status(501)
       .json({ message: `Something went wrong while fetching the profiles` });
   }
+}
+
+export async function getPreviewProfileData(req, res) {
+  if (req.isAuthenticated()) {
+    const clientETag = req.headers["if-none-match"];
+    const currentETag = etag(JSON.stringify(req.user));
+    console.log(clientETag, clientETag === currentETag);
+    if (clientETag === currentETag) {
+      res.status(304).send(); // Not Modified
+    } else {
+      return res
+        .status(200)
+        .set("Cache-Control", "public, max-age=604800")
+        .setHeader("ETag", currentETag)
+        .json({
+          message: "you are authenticted",
+          user: {
+            id: req.user.id,
+            username: req.user.username,
+            side: req.user.side,
+            affinity: req.user.faction,
+          },
+        });
+    }
+  } else
+    return res
+      .status(401)
+      .json({ message: "you are not authenticted", user: null });
 }

@@ -26,7 +26,7 @@ type UserContextProps = {
     event: React.SyntheticEvent,
     values: Omit<User, "id">
   ) => Promise<{ error: string } | undefined>;
-  isAuthenticated: () => Promise<void>;
+  getProfile: () => Promise<void>;
 };
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -44,31 +44,22 @@ const UserProvider: React.FC<userProviderProps> = ({ children, ...props }) => {
       rawResponse: true,
     });
     const data = await response.json();
-
     if (response.status === 401) {
       return data;
     }
-
     setUser({
-      id: data.user.id,
-      ...(data.user.username && { username: data.user.username }),
+      ...response.user,
       bot: false,
     });
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        id: data.user.id,
-        ...(data.user.username && { username: data.user.username }),
-        bot: false,
-      })
-    );
-
+    console.log(data.user.username);
     if (data.user.username) {
+      console.log("pushing to feeed");
       router.push("/feed");
     } else if (data.user) {
       router.push("/create-profile");
     }
+    return;
   }
 
   async function signup(e: React.SyntheticEvent, values: DataFormProps) {
@@ -95,8 +86,11 @@ const UserProvider: React.FC<userProviderProps> = ({ children, ...props }) => {
     localStorage.removeItem("user");
   }
 
-  async function isAuthenticated() {
-    const response = await apiClient("auth/verify");
+  async function getProfile(withEtag: boolean = false) {
+    const response = await apiClient("profile/preview", {
+      ...(withEtag && { etag: "userProfileETag" }),
+    });
+    return response;
   }
 
   async function createUserProfile(
@@ -133,11 +127,18 @@ const UserProvider: React.FC<userProviderProps> = ({ children, ...props }) => {
   }
 
   useEffect(() => {
-    const userStoredData = localStorage.getItem("user");
-    if (userStoredData) {
-      setUser(JSON.parse(userStoredData));
+    async function getUserData() {
+      let userData = await getProfile(true);
+      if (!userData) userData = await getProfile(); // caching mechanism in futur branch
+      if (userData) {
+        setUser((prev) => (prev = { ...prev, ...userData.user }));
+      }
     }
-  }, []);
+    if (!user) {
+      getUserData();
+    }
+  }, [user]);
+  console.log("USER DATA", user);
 
   const value = {
     user,
@@ -146,7 +147,7 @@ const UserProvider: React.FC<userProviderProps> = ({ children, ...props }) => {
     signup,
     verifyEmail,
     createUserProfile,
-    isAuthenticated,
+    getProfile,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

@@ -3,6 +3,7 @@ import { Button, ProfilePic, Typography } from "..";
 import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 import messageHeaderStyles from "./css/messageHeader.module.css";
+import avatarPng from "@/assets/images/avatar.png";
 
 type MessageHeaderProps = {
   isExpended: boolean;
@@ -22,7 +23,10 @@ const MessageHeader: React.FC<MessageHeaderProps> = ({
   return (
     <div className={messageHeaderStyles.masterHeader}>
       <div className={messageHeaderStyles.leftContainer} onClick={handleExpand}>
-        <ProfilePic location="bubbleMessage" source={userData.profilePic.src} />
+        <ProfilePic
+          location="bubbleMessage"
+          source={userData?.profilePic?.src || avatarPng}
+        />
         <Typography color="black" marginLeft={5}>
           {view === "room" ? userData.username : "Messaging"}
         </Typography>
@@ -38,7 +42,7 @@ const MessageHeader: React.FC<MessageHeaderProps> = ({
       )}
       {view === "room" && (
         // @ts-ignore
-        <Button onClick={() => handleCloseConversation(userData.id)}>
+        <Button onClick={() => handleCloseConversation(userData.roomId)}>
           <RxCross2 style={{ width: 15, height: 15 }} />
         </Button>
       )}

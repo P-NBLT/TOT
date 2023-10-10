@@ -7,22 +7,31 @@ import githubStrategy from "./githubStrategy.js";
 
 const store = new session.MemoryStore();
 
+export const sessionMiddleware = session({
+  secret: "some secret",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false,
+    maxAge: 300000000,
+    httpOnly: true,
+  },
+  store,
+});
+
+export const passportMiddleware = {
+  initialize: passport.initialize(),
+  session: passport.session(),
+};
+
 export function initializePassport(app) {
   try {
-    app.use(
-      session({
-        secret: "some secret",
-        resave: false,
-        saveUninitialized: false,
-        cookie: { secure: false, maxAge: 300000000 },
-        store,
-      })
-    );
+    app.use(sessionMiddleware);
     localStrategy(passport, User);
     googleStrategy(passport, User);
     githubStrategy(passport, User);
-    app.use(passport.initialize());
-    app.use(passport.session());
+    app.use(passportMiddleware.initialize);
+    app.use(passportMiddleware.session);
   } catch (e) {
     console.log("ERROR PASSPORT at initialization", e);
   }
@@ -35,6 +44,8 @@ export function serializePassport() {
         id: user.id,
         email: user.email,
         username: user.username,
+        side: user.side,
+        faction: user.faction,
       });
     });
   });
