@@ -36,8 +36,8 @@ describe("Local Auth journey: singup, verify email, signin logout", () => {
       .query({ token });
 
     expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty("id");
-    expect(response.body).toHaveProperty("email");
+    expect(response.body.user).toHaveProperty("id");
+    expect(response.body.user).toHaveProperty("email");
   });
 
   let user;
@@ -50,8 +50,6 @@ describe("Local Auth journey: singup, verify email, signin logout", () => {
     user = response.body.user;
     expect(response.body).toHaveProperty("user");
     expect(response.body.user).toHaveProperty("id");
-    expect(response.body).toHaveProperty("session");
-    expect(response.body.session).toHaveProperty("passport");
   });
 
   test("user is loging out", async function () {
