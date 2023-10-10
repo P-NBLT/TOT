@@ -69,7 +69,7 @@ const createPostsQuery = `CREATE TABLE posts (
 const createCommentsQuery = `CREATE TABLE "comments" (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id),
-        post_id NOT NULL INTEGER REFERENCES posts(id),
+        post_id INTEGER NOT NULL REFERENCES posts(id),
         parent_comment_id INT REFERENCES comments(id),
         body text NOT NULL,
         likes INTEGER DEFAULT 0,
