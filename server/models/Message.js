@@ -1,4 +1,5 @@
 import { executeQuery } from "../utils/databaseQuery.js";
+import { dbPropagateError, dbSuccess } from "../utils/error/dbHelper.js";
 
 const Message = {
   storeMessage: async function storeMessage(message, userId, chatId) {
@@ -12,10 +13,9 @@ const Message = {
                                SET last_activity = NOW()
                                WHERE chat_id = $1;`;
       await executeQuery(updateChatQuery, [chatId]);
-      return response[0];
+      return dbSuccess(response[0]);
     } catch (err) {
-      console.log(err);
-      return { success: false, errorMessage: err.message };
+      dbPropagateError(err);
     }
   },
 
@@ -49,11 +49,10 @@ const Message = {
       ORDER BY lm.timestamp ASC;`;
       const values = [chatId, offset];
       const response = await executeQuery(query, values);
-
-      if (response.length > 0) return response;
+      console.log(response);
+      if (response.length > 0) return dbSuccess(response);
     } catch (e) {
-      console.log(e);
-      return { success: false };
+      dbPropagateError(e);
     }
   },
 };

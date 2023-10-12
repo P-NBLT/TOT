@@ -1,10 +1,12 @@
 import { executeQuery, concatValues } from "../utils/databaseQuery.js";
+import { dbPropagateError, dbSuccess } from "../utils/error/dbHelper.js";
 
 const Chat = {
   createRoom: async function createRoom(users) {
     try {
       const isCollision = await this.checkSingleRoomCollision(users);
-      if (isCollision) return { success: false, message: "Room already exist" };
+      if (isCollision)
+        return dbSuccess({ message: "Room already exist", interupted: true });
       // create chat room
       const chatQuery = `INSERT INTO chats (members_count, chat_type)
                        VALUES($1, $2)
@@ -22,10 +24,9 @@ const Chat = {
       const user2 = users[1];
       const users_chatValues = [user1, user2, chatRoom[0].chat_id];
       await executeQuery(usersChatQuery, users_chatValues);
-      return chatRoom;
+      return dbSuccess(chatRoom);
     } catch (err) {
-      console.log(err);
-      return { success: false, errorMessage: err.message };
+      dbPropagateError(err);
     }
   },
   createGroupRoom: async function createGroupRoom(name, users) {
@@ -49,7 +50,7 @@ const Chat = {
     ];
 
     await executeQuery(usersChatQuery);
-    return chatRoom;
+    return dbSuccess(chatRoom);
   },
   checkSingleRoomCollision: async function (users) {
     const user1 = users[0];
@@ -76,7 +77,7 @@ const Chat = {
       const values = [userId, roomId];
       const response = await executeQuery(query, values);
       console.log("USER IDS", response);
-      return response;
+      return dbSuccess(response);
     } catch (e) {
       console.log(e);
     }
@@ -93,9 +94,9 @@ const Chat = {
       const value = [userId, limit];
 
       const response = await executeQuery(query, value);
-      return response;
+      return dbSuccess(response);
     } catch (e) {
-      return e;
+      dbPropagateError(e);
     }
   },
   getUserChatDetailsWithLastMessages:
@@ -150,12 +151,10 @@ const Chat = {
         const values = [userId, offset];
 
         const response = await executeQuery(query, values);
-
-        if (response.length > 0) return { success: true, data: response };
-        else return { success: true, data: [], message: "no result found" };
+        console.log(response);
+        return dbSuccess(response);
       } catch (e) {
-        console.log(e);
-        return { success: false, data: null };
+        dbPropagateError(e);
       }
     },
 };

@@ -1,6 +1,7 @@
 import { executeQuery } from "../utils/databaseQuery.js";
 import bcrypt from "bcrypt";
 import { config } from "../config/index.js";
+import { dbSuccess, dbPropagateError } from "../utils/error/dbHelper.js";
 
 const User = {
   createLocal: async function createUserLocal(userInfo) {
@@ -14,14 +15,20 @@ const User = {
     `;
       const userValues = [lowerCaseEmail, hashedPassword, token];
       const user = await executeQuery(userQuery, userValues);
-      return user;
+      return dbSuccess(user);
     } catch (err) {
-      console.log(err.message);
-      return { success: false, errorMessage: err.message };
+      return dbPropagateError(err);
     }
   },
   setLocalUserToVerified: async function setVerify(token) {
     try {
+      const queryCheckVerify = `SELECT is_verified FROM users WHERE email_verification_token = $1`;
+      const hasBeenVerified = await executeQuery(queryCheckVerify, [
+        token,
+      ]).then((response) => response[0].is_verified);
+
+      if (hasBeenVerified) return dbSuccess({ message: "Already verified" });
+
       const query = `UPDATE users
                      SET is_verified = $1
                      WHERE users.email_verification_token = $2
@@ -29,28 +36,29 @@ const User = {
 
       const values = [true, token];
       const user = await executeQuery(query, values);
-      if (user.length === 0) return false;
-      return user[0];
+
+      if (user.length === 0) return dbSuccess(false);
+      return dbSuccess(user[0]);
     } catch (e) {
-      console.log(err);
+      dbPropagateError(e);
     }
   },
   createOrFindOauth: async function createOrFindUserOauth(userInfo) {
     const { id, email, provider, accessToken, refershToken } = userInfo;
 
     try {
-      const isUserExist = await this.findUserByOauthId(id);
+      const existingUser = await this.findUserByOauthId(id);
 
-      if (isUserExist.oauth_id) {
+      if (existingUser.oauth_id) {
         if (refershToken) {
           const query = `UPDATE users 
              SET access_token = $1 
              WHERE users.oauth_id = $2 
              RETURNING *`;
           const user = await executeQuery(query, [refershToken, id]);
-          return user;
+          return dbSuccess(user);
         }
-        return isUserExist;
+        return dbSuccess(existingUser);
       } else {
         const userQuery = `INSERT INTO users (email, oauth_provider, oauth_id, oauth_access_token, is_verified)
                            VALUES($1, $2, $3, $4, $5)
@@ -58,11 +66,10 @@ const User = {
 
         const userValues = [email, provider, id, accessToken, true];
         const user = await executeQuery(userQuery, userValues);
-        return user[0];
+        return dbSuccess(user[0]);
       }
     } catch (err) {
-      console.log(err);
-      return { success: false, errorMessage: err.message };
+      dbPropagateError(e);
     }
   },
   findUserByEmail: async function findUserByEmail(email) {
@@ -73,11 +80,10 @@ const User = {
       const lowerCaseEmail = email.toLowerCase();
       const values = [lowerCaseEmail];
       const response = await executeQuery(query, values);
-      if (response.length === 0) return false;
-      const user = response[0];
-      return user;
+      if (response.length === 0) return dbSuccess(false);
+      return dbSuccess(response[0]);
     } catch (err) {
-      return { success: false, errorMessage: err.message };
+      dbPropagateError(e);
     }
   },
   findUserById: async function findById(id) {
@@ -87,11 +93,10 @@ const User = {
                      WHERE users.id = $1`;
       const values = [id];
       const response = await executeQuery(query, values);
-      if (response.length === 0) return false;
-      const user = response[0];
-      return user;
+      if (response.length === 0) return dbSuccess(false);
+      return dbSuccess(response[0]);
     } catch (err) {
-      return { success: false, errorMessage: err.message };
+      dbPropagateError(e);
     }
   },
   findUserByOauthId: async function findById(id) {
@@ -105,15 +110,15 @@ const User = {
       const user = response[0];
       return user;
     } catch (err) {
-      return { success: false, errorMessage: err.message };
+      dbPropagateError(e);
     }
   },
   get: async function get(query, values) {
     try {
       const result = await executeQuery(query, values);
-      return result;
+      return dbSuccess(result);
     } catch (err) {
-      return { success: false, errorMessage: err.message };
+      dbPropagateError(e);
     }
   },
 };

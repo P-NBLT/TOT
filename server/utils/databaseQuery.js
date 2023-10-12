@@ -1,5 +1,5 @@
 import pool from "../config/database.js";
-import { errorQueryDataBase } from "./error/databaseError.js";
+import { CustomError } from "./error/customError.js";
 
 export async function executeQuery(query, values = []) {
   const client = await pool.connect().catch((err) => errorQueryDataBase(err));
@@ -15,7 +15,7 @@ export async function executeQuery(query, values = []) {
   } catch (err) {
     await client.query("ROLLBACK");
     console.log(err);
-    return errorQueryDataBase(err);
+    throw new CustomError({ message: err, err });
   } finally {
     client.release(true);
   }

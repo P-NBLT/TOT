@@ -1,4 +1,5 @@
 import { executeQuery, selectOptionsHandler } from "../utils/databaseQuery.js";
+import { dbSuccess, dbPropagateError } from "../utils/error/dbHelper.js";
 import User from "./User.js";
 
 const Profile = {
@@ -23,25 +24,24 @@ const Profile = {
       const values = [user.id, username, role, bot, affinity, side, homeworld];
 
       const userProfile = await executeQuery(profileQuery, values);
-      return userProfile;
+      return dbSuccess(userProfile);
     } catch (err) {
-      return { success: false, errorMessage: err.message };
+      dbPropagateError(err);
     }
   },
   findProfileByUserID: async function findProfileByID(userID, selectOption) {
     try {
-      let optionReturnedColumn = selectOptionsHandler(selectOption);
-      const values = [userID];
-
       const query = `SELECT users.id, profile.username, profile.bot, profile.side, profile.affinity_name FROM users, profile
       WHERE users.id = $1 AND users.id = profile.user_id;`;
 
+      const values = [userID];
+
       const response = await executeQuery(query, values);
 
-      if (response.length === 0) return false;
-      return response[0];
+      if (response.length === 0) return dbSuccess(false);
+      return dbSuccess(response[0]);
     } catch (err) {
-      return { success: false, errorMessage: err.message };
+      dbPropagateError(err);
     }
   },
   getAllProfiles: async function getAllProfiles(selectOptions) {
@@ -51,9 +51,9 @@ const Profile = {
       const query = `SELECT ${optionReturnedColumn}
                      FROM profile`;
       const profiles = await executeQuery(query);
-      return profiles;
+      return dbSuccess(profiles);
     } catch (err) {
-      return { success: false, errorMessage: err.message };
+      dbPropagateError(err);
     }
   },
   isBot: async function checkForBot(userId) {
@@ -61,10 +61,10 @@ const Profile = {
       const query = `SELECT user_id, bot, username FROM profile WHERE user_id = $1`;
       const value = [userId];
       const response = await executeQuery(query, value);
-      if (response.length === 0) return false;
-      return response[0].bot;
-    } catch (e) {
-      console.log(e);
+      if (response.length === 0) return dbSuccess(false);
+      return dbSuccess(response[0].bot);
+    } catch (err) {
+      console.log(`\n\nERROR::ORIGIN<<DATABASE>>::`, err.developerMessage);
     }
   },
 };
