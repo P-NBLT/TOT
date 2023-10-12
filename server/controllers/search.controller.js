@@ -1,5 +1,6 @@
 import * as searchProcedures from "../procedures/search.procedure.js";
 import { search } from "../services/search.service.js";
+import * as responseHelper from "../utils/responseHelper.js";
 
 export async function searchFriendAndChatByQuery(req, res) {
   const { query, id } = req.query;
@@ -23,8 +24,8 @@ export async function searchFriendAndChatByQuery(req, res) {
       }
     }
 
-    return res.status(200).json({ chats, friends });
+    return res.status(200).json(responseHelper.success({ chats, friends }));
   } catch (e) {
-    return { success: false, error: e };
+    return responseHelper.error(e);
   }
 }

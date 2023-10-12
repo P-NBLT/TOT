@@ -25,6 +25,7 @@ export async function initUser(socket, user) {
     console.log("joined room", roomId);
     socket.join(roomId);
     const messages = await messageServices.getMessagesByRoomId(roomId);
+    console.log(messages);
     cb(messages);
     return;
   });

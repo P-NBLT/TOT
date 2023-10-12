@@ -6,7 +6,6 @@ function initialize(passport, User) {
   const clientID = config.GOOGLE_CLIENT_ID;
   const clientSecret = config.GOOGLE_CLIENT_SECRET;
   const callbackURL = config.GOOGLE_CALLBACK_URI;
-
   passport.use(
     new GoogleStrategy(
       {
