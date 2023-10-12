@@ -10,7 +10,10 @@ import { SOCKETS_EMITTERS } from "@/socket/socketEvents";
 import avatarPic from "@/assets/images/avatar.png";
 import { useUser } from "@/app/controllers/userProvider";
 
-const ConversationFeed: React.FC<{ roomId: string }> = ({ roomId }) => {
+const ConversationFeed: React.FC<{
+  roomId: string;
+  handleInboxFeed: (roomId: string, content: string) => void;
+}> = ({ roomId, handleInboxFeed }) => {
   const textRef = useRef<HTMLTextAreaElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const [textareaHeight, setTextareaHeight] = useState<number>(40);
@@ -90,6 +93,7 @@ const ConversationFeed: React.FC<{ roomId: string }> = ({ roomId }) => {
   }, [newMessage]);
   useEffect(() => {
     if (chatHistory) {
+      console.log({ chatHistory });
       setMessageQueue(chatHistory);
       setTimeout(() => scrollToBottom(), 10);
     }
@@ -116,6 +120,7 @@ const ConversationFeed: React.FC<{ roomId: string }> = ({ roomId }) => {
     ]);
 
     sendMessageToServer(messageContent);
+    handleInboxFeed(roomId, messageContent);
     setMessageContent("");
     setTimeout(() => scrollToBottom(), 10);
   }

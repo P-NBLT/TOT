@@ -6,6 +6,7 @@ import ConversationFeed from "./conversationFeed";
 type ConversationBubbleProps = {
   expandConversation?: (roomId: string) => void;
   handleCloseConversation: (roomId: string) => void;
+  handleInboxFeed: (roomId: string, content: string) => void;
   contactData: {
     username: string;
     roomId: string;
@@ -18,6 +19,7 @@ const ConversationBubble: React.FC<ConversationBubbleProps> = ({
   contactData,
   handleCloseConversation,
   expandConversation,
+  handleInboxFeed,
 }) => {
   const [isExpended, setIsExpended] = useState<boolean>(contactData.open);
   const [messagingBoxHeight, setMessagingBoxHeight] = useState<number>(400);
@@ -59,7 +61,10 @@ const ConversationBubble: React.FC<ConversationBubbleProps> = ({
           ]
         }
       >
-        <ConversationFeed roomId={contactData.roomId} />
+        <ConversationFeed
+          roomId={contactData.roomId}
+          handleInboxFeed={handleInboxFeed}
+        />
       </div>
     </div>
   );

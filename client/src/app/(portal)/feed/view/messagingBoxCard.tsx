@@ -43,17 +43,44 @@ const MessagingBoxCard: React.FC = () => {
     return;
   }
 
+  function isInboxFeed(roomId: string) {
+    const idx = inboxFeedMessages.findIndex((el) => el.roomId === roomId);
+    if (idx > 0) {
+    }
+    return idx === -1 ? true : false;
+  }
+
+  function handleInboxFeed(roomId: string, content: string) {
+    const inboxFeedCopy = [...inboxFeedMessages];
+    const idx = inboxFeedCopy.findIndex((el) => el.roomId === roomId);
+    inboxFeedCopy[idx].content = content;
+    inboxFeedCopy[idx].timestamp = new Date().toISOString();
+    inboxFeedCopy.unshift(inboxFeedCopy[idx]);
+    inboxFeedCopy.splice(idx + 1, 1);
+    console.log(inboxFeedCopy);
+    setInboxFeedMessages(inboxFeedCopy);
+  }
+
   async function addConversationToQueue(message: any) {
     if (!message.roomId) {
       var newRoom = await createRoom(user!.id, message.contactId);
       message.roomId = newRoom.roomId;
       setInboxFeedMessages((prev: InboxFeedMessage[]) => [
-        { ...message, content: "", timestamp: "" },
+        {
+          ...message,
+          content: "New Chat",
+          timestamp: new Date().toISOString(),
+        },
         ...prev,
       ]);
-    } else if (!message.content) {
+    } else if (!message.content && isInboxFeed(message.roomId)) {
+      console.log(inboxFeedMessages, message);
       setInboxFeedMessages((prev: InboxFeedMessage[]) => [
-        { ...message, content: "", timestamp: "" },
+        {
+          ...message,
+          content: "New chat",
+          timestamp: new Date().toISOString(),
+        },
         ...prev,
       ]);
     }
@@ -98,6 +125,7 @@ const MessagingBoxCard: React.FC = () => {
       const rooms = await apiClient(
         `chat/user/${user?.id}/rooms/recent?offset=${offset}`
       );
+      console.log(rooms);
       setInboxFeedMessages(rooms);
     }
     user && getLastActiveChats();
@@ -115,6 +143,7 @@ const MessagingBoxCard: React.FC = () => {
             <ConversationBubble
               expandConversation={expandConversation}
               handleCloseConversation={handleCloseConversation}
+              handleInboxFeed={handleInboxFeed}
               contactData={conversation}
               key={conversation.roomId}
             />
