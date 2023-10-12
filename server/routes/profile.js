@@ -10,7 +10,11 @@ router.get(
   profileController.getUsersProfile
 );
 
-router.get("/preview", profileController.getPreviewProfileData);
+router.get(
+  "/preview",
+  authMiddleware.isLoggedIn,
+  profileController.getPreviewProfileData
+);
 
 router.get(
   "/:userId",

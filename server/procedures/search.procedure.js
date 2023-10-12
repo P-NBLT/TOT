@@ -5,7 +5,7 @@ export const friendsAndMessagesQuery = `WITH Friends AS (
             ELSE f.requester_id
         END AS friend_id
     FROM friendship f
-    WHERE f.requester_id = $1 
+    WHERE f.requester_id = $1
 ),
 FilteredFriends AS (
     SELECT p.username, p.user_id, p.side, p.affinity_name
@@ -29,13 +29,21 @@ LastMessages AS (
         fc.chat_id,
         MAX(m.created_at) as last_message_time,
         m.message,
-        m.user_id
+        m.user_id,
+  m.message_id
     FROM messages m
     JOIN FilteredChats fc ON m.chat_id = fc.chat_id
-    GROUP BY fc.chat_id, m.message, m.user_id
+  	INNER JOIN (
+				  SELECT 
+              chat_id,
+              MAX(created_at) as last_message_time
+          FROM messages
+          GROUP BY chat_id
+  ) lm on m.chat_id = lm.chat_id AND m.created_at = lm.last_message_time
+    GROUP BY fc.chat_id, m.message, m.user_id, 5
 )
 SELECT
-ff.user_id as "contactId",
+ff.user_id as "contactId",    
 ff.username as "contactName",
 ff.side,
 ff.affinity_name as affinity,
@@ -45,4 +53,4 @@ lm.last_message_time as timestamp
 FROM FilteredFriends ff
 JOIN FilteredChats fc ON ff.user_id = fc.user_id
 LEFT JOIN LastMessages lm ON fc.chat_id = lm.chat_id
-ORDER BY POSITION(lower($2) IN lower(ff.username)), lm.last_message_time DESC NULLS LAST;`;
+ORDER BY POSITION(lower($2) IN lower(ff.username));`;
