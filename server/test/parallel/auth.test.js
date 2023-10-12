@@ -16,12 +16,13 @@ describe("Local Auth journey: singup, verify email, signin logout", () => {
     const response = await request.post(`${authPath}/signup`).send(body);
     const responseBody = response.body;
     expect(response.status).toBe(201);
-    expect(responseBody.message).toBe("success");
+    expect(responseBody.message).toBe("Success");
   });
 
   test("user signed up but can't login because need to verify his email", async function () {
     const response = await request.post(`${authPath}/login/local`).send(body);
-    const responseBody = response.body;
+    const responseBody = response.body.data;
+
     expect(response.status).toBe(401);
     expect(responseBody.message).toBe(
       "user email not verified. please verify yout email."
@@ -46,10 +47,9 @@ describe("Local Auth journey: singup, verify email, signin logout", () => {
       .post(`${authPath}/login/local`)
       .send(body)
       .expect(200);
-
-    user = response.body.user;
-    expect(response.body).toHaveProperty("user");
-    expect(response.body.user).toHaveProperty("id");
+    user = response.body.data.user;
+    expect(response.body.data).toHaveProperty("user");
+    expect(response.body.data.user).toHaveProperty("id");
   });
 
   test("user is loging out", async function () {
