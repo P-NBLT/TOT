@@ -19,6 +19,8 @@ export const config = {
   SERVER_PORT: process.env.SERVER_PORT,
   SALT: process.env.SALT,
   WEBSITE_DOMAIN: process.env.CLIENT_DOMAIN,
+  CLIENT_DOMAIN: process.env.CLIENT_DOMAIN,
+  SERVER_DOMAIN: process.env.SERVER_DOMAIN,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   GOOGLE_CALLBACK_URI:
