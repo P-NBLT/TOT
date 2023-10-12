@@ -43,23 +43,24 @@ const UserProvider: React.FC<userProviderProps> = ({ children, ...props }) => {
       method: "POST",
       rawResponse: true,
     });
+    console.log("login response", response);
     const data = await response.json();
     if (response.status === 401) {
-      return data;
+      return data.data;
     }
     setUser({
-      ...response.user,
+      ...data.data.user,
       bot: false,
     });
 
-    console.log(data.user.username);
-    if (data.user.username) {
+    console.log(data.data.user.username);
+    if (data.data.user.username) {
       console.log("pushing to feeed");
       router.push("/feed");
-    } else if (data.user) {
+    } else if (data.data.user) {
       router.push("/create-profile");
     }
-    return;
+    return data.data;
   }
 
   async function signup(e: React.SyntheticEvent, values: DataFormProps) {
@@ -128,8 +129,9 @@ const UserProvider: React.FC<userProviderProps> = ({ children, ...props }) => {
 
   useEffect(() => {
     async function getUserData() {
-      let userData = await getProfile(true);
-      if (!userData) userData = await getProfile(); // caching mechanism in futur branch
+      // let userData = await getProfile(true);
+      let userData = await getProfile(); // caching mechanism in futur branch
+      console.log({ userData });
       if (userData) {
         setUser((prev) => (prev = { ...prev, ...userData.user }));
       }

@@ -67,7 +67,8 @@ export async function apiClient(
 
   const json = await response.json();
   if (response.ok) {
-    return json;
+    console.log("JSON", json, "path", endPoint);
+    return json.data;
   } else {
     console.log("REJECT", json);
     return Promise.reject({ json, status: response.status });
