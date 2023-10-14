@@ -25,7 +25,7 @@ const InboxFeed: React.FC<InboxFeedProps> = ({
           >
             <ProfilePic
               location="inboxMessage"
-              source={message.profilePic?.src || avatarPic}
+              source={message.profilePic || avatarPic}
             />
             <div className={inboxFeedStyle.rightContainer}>
               <div className={inboxFeedStyle["message-top"]}>

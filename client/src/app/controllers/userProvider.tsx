@@ -43,7 +43,7 @@ const UserProvider: React.FC<userProviderProps> = ({ children, ...props }) => {
       method: "POST",
       rawResponse: true,
     });
-    console.log("login response", response);
+
     const data = await response.json();
     if (response.status === 401) {
       return data.data;
@@ -53,9 +53,7 @@ const UserProvider: React.FC<userProviderProps> = ({ children, ...props }) => {
       bot: false,
     });
 
-    console.log(data.data.user.username);
     if (data.data.user.username) {
-      console.log("pushing to feeed");
       router.push("/feed");
     } else if (data.data.user) {
       router.push("/create-profile");
@@ -117,6 +115,7 @@ const UserProvider: React.FC<userProviderProps> = ({ children, ...props }) => {
         username: username,
         affinity,
         side: side,
+        profilePic: user?.profilePic,
       };
 
       setUser(updatedUser);

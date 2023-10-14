@@ -24,7 +24,7 @@ const ConnectionFeed: React.FC<InboxFeedProps> = ({
           >
             <ProfilePic
               location="comment"
-              source={connection.profilePic?.src || avatarPng}
+              source={connection.profilePic || avatarPng}
             />
             <div className={connectionFeedStyles.rightContainer}>
               <Typography color="black">

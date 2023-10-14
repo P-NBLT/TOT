@@ -63,6 +63,7 @@ const ConversationBubble: React.FC<ConversationBubbleProps> = ({
       >
         <ConversationFeed
           roomId={contactData.roomId}
+          contactProfilePic={contactData.profilePic}
           handleInboxFeed={handleInboxFeed}
         />
       </div>
