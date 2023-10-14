@@ -54,6 +54,7 @@ const createProfileQuery = `CREATE TABLE profile (
         side VARCHAR(20) NOT NULL,
         affinity_name VARCHAR(30) REFERENCES affinity(name) NOT NULL,
         homeworld_name VARCHAR(30) REFERENCES planets(name),
+        profile_pic VARCHAR(250),
         created_at DATE DEFAULT NOW()
 );`;
 
