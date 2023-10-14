@@ -31,7 +31,7 @@ const Profile = {
   },
   findProfileByUserID: async function findProfileByID(userID, selectOption) {
     try {
-      const query = `SELECT users.id, profile.username, profile.bot, profile.side, profile.affinity_name FROM users, profile
+      const query = `SELECT users.id, profile.username, profile.bot, profile.side, profile.affinity_name, profile.profile_pic as "profilePic" FROM users, profile
       WHERE users.id = $1 AND users.id = profile.user_id;`;
 
       const values = [userID];
@@ -62,7 +62,7 @@ const Profile = {
       const value = [userId];
       const response = await executeQuery(query, value);
       if (response.length === 0) return dbSuccess(false);
-      return dbSuccess(response[0].bot);
+      return dbSuccess(response[0]);
     } catch (err) {
       console.log(`\n\nERROR::ORIGIN<<DATABASE>>::`, err.developerMessage);
     }

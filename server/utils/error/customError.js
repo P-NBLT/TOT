@@ -4,7 +4,7 @@ export class CustomError extends Error {
   constructor({ message, status, err }) {
     super(message);
     this.status = status;
-    this.code = err.code;
+    this.code = err?.code || null;
     this.developerMessage = this.errorQueryDataBase(this.code);
     this.clientMessage = "Internal Error";
     this.raw = err;

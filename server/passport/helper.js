@@ -8,7 +8,8 @@ export async function getProfile(user) {
       ...user,
       username: profile.username,
       side: profile.side,
-      faction: profile.affinity_name,
+      affinity: profile.affinity_name,
+      profilePic: profile.profilePic,
     };
   return user;
 }

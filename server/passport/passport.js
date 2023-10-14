@@ -42,10 +42,10 @@ export function serializePassport() {
     process.nextTick(function () {
       return cb(null, {
         id: user.id,
-        email: user.email,
         username: user.username,
         side: user.side,
-        faction: user.faction,
+        affinity: user.affinity,
+        profilePic: user.profilePic,
       });
     });
   });

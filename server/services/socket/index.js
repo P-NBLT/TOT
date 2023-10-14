@@ -69,7 +69,7 @@ async function sendPrivateMessage({
 }) {
   const isBot = await Profile.isBot(recipientId);
   //if bot => use botManager and send the response back. this will be implemented from a different branch
-  if (isBot) {
+  if (isBot.bot) {
     cb("Bot response", timestamp, isBot.username, recipientId);
     return;
   }

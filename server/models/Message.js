@@ -41,7 +41,7 @@ const Message = {
         LIMIT 10
         OFFSET 10 * $2
       )
-      SELECT c.chat_id as "roomId", c.chat_name as "roomName",  p.user_id, p.username, lm.message_id, lm.timestamp, lm.message as content
+      SELECT c.chat_id as "roomId", c.chat_name as "roomName",  p.user_id as "userId", p.username, lm.message_id, lm.timestamp, lm.message as content
       FROM Last_Messages lm
       JOIN UserChats uc ON lm.user_id = uc.user_id AND lm.chat_id = uc.chat_id
       JOIN Profiles p ON lm.user_id = p.user_id

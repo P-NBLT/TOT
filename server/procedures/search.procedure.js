@@ -8,7 +8,7 @@ export const friendsAndMessagesQuery = `WITH Friends AS (
     WHERE f.requester_id = $1
 ),
 FilteredFriends AS (
-    SELECT p.username, p.user_id, p.side, p.affinity_name
+    SELECT p.username, p.user_id, p.side, p.affinity_name, p.profile_pic
     FROM profile p
     JOIN Friends f ON f.friend_id = p.user_id
     WHERE p.username ILIKE $2
@@ -47,6 +47,7 @@ ff.user_id as "contactId",
 ff.username as "contactName",
 ff.side,
 ff.affinity_name as affinity,
+ff.profile_pic as "profilePic"
 fc.chat_id as "roomId",
 lm.message as content,
 lm.last_message_time as timestamp
