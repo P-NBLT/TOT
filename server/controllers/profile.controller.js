@@ -91,7 +91,8 @@ export async function getPreviewProfileData(req, res) {
                 id: req.user.id,
                 username: req.user.username,
                 side: req.user.side,
-                affinity: req.user.faction,
+                affinity: req.user.affinity,
+                profilePic: req.user.profilePic,
               },
             })
           );

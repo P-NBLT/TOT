@@ -4,6 +4,7 @@ export type User = {
   bot: boolean;
   side?: string;
   affinity?: string;
+  profilePic?: string;
 };
 
 type Session = {};

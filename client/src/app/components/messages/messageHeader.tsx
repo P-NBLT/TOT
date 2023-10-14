@@ -25,7 +25,7 @@ const MessageHeader: React.FC<MessageHeaderProps> = ({
       <div className={messageHeaderStyles.leftContainer} onClick={handleExpand}>
         <ProfilePic
           location="bubbleMessage"
-          source={userData?.profilePic?.src || avatarPng}
+          source={userData?.profilePic || avatarPng}
         />
         <Typography color="black" marginLeft={5}>
           {view === "room" ? userData.username : "Messaging"}

@@ -135,6 +135,7 @@ const Chat = {
           p.username as "contactName",
           p.affinity_name as affinity,
           p.side,
+          p.profile_pic as "profilePic",
           uc.chat_id as "roomId",
           c.last_activity as "timestamp",
           lm.message as content

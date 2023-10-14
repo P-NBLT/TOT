@@ -95,6 +95,7 @@ export async function loginUser(req, res) {
             username: req.user.username,
             side: req.user.side,
             affinity: req.user.affinity,
+            profilePic: req.user.profilePic,
           },
         })
       );
@@ -113,6 +114,7 @@ export async function verifyAuthentification(req, res) {
             username: req.user.username,
             side: req.user.side,
             affinity: req.user.faction,
+            profilePic: req.user.profilePic,
           },
         })
       );

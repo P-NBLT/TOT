@@ -12,8 +12,9 @@ import { useUser } from "@/app/controllers/userProvider";
 
 const ConversationFeed: React.FC<{
   roomId: string;
+  contactProfilePic: string;
   handleInboxFeed: (roomId: string, content: string) => void;
-}> = ({ roomId, handleInboxFeed }) => {
+}> = ({ roomId, contactProfilePic, handleInboxFeed }) => {
   const textRef = useRef<HTMLTextAreaElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const [textareaHeight, setTextareaHeight] = useState<number>(40);
@@ -86,14 +87,15 @@ const ConversationFeed: React.FC<{
           time: newMessage.timestamp,
           profilePic: avatarPic,
           content: newMessage.message,
+          userId: newMessage.userId,
         },
       ]);
       setTimeout(() => scrollToBottom(), 10);
     }
   }, [newMessage]);
+
   useEffect(() => {
     if (chatHistory) {
-      console.log({ chatHistory });
       setMessageQueue(chatHistory);
       setTimeout(() => scrollToBottom(), 10);
     }
@@ -116,6 +118,7 @@ const ConversationFeed: React.FC<{
         profilePic: userData.profilePic,
         time: new Date().toISOString(),
         content: messageContent,
+        userId: user?.id,
       },
     ]);
 
@@ -141,7 +144,12 @@ const ConversationFeed: React.FC<{
             <div className={conversationFeedModule.messageContainer} key={idx}>
               <ProfilePic
                 location="comment"
-                source={message.profilePic?.src || avatarPic}
+                //@ts-ignore
+                source={
+                  (message.userId === user?.id
+                    ? user?.profilePic
+                    : contactProfilePic) || avatarPic
+                }
                 className={conversationFeedModule.profilePic}
               />
               <div className={conversationFeedModule.header}>
