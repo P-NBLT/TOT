@@ -1,8 +1,6 @@
-import { Configuration, OpenAIApi } from "openai";
+import { OpenAI } from "openai";
 import { config } from "./index.js";
 
-const configuration = new Configuration({ apiKey: config.OPEN_AI_API_KEY });
-
-const openai = new OpenAIApi(configuration);
+const openai = new OpenAI({ apiKey: config.OPEN_AI_API_KEY });
 
 export default openai;
