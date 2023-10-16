@@ -64,17 +64,17 @@ const MessagingBoxCard: React.FC = () => {
   async function addConversationToQueue(message: any) {
     if (!message.roomId) {
       var newRoom = await createRoom(user!.id, message.contactId);
-      message.roomId = newRoom.roomId;
+
       setInboxFeedMessages((prev: InboxFeedMessage[]) => [
         {
           ...message,
           content: "New Chat",
           timestamp: new Date().toISOString(),
+          roomId: newRoom.roomId,
         },
         ...prev,
       ]);
     } else if (!message.content && isInboxFeed(message.roomId)) {
-      console.log(inboxFeedMessages, message);
       setInboxFeedMessages((prev: InboxFeedMessage[]) => [
         {
           ...message,
@@ -160,5 +160,5 @@ async function createRoom(userId: string, userId2: string) {
     data: { users: [userId, userId2] },
     method: "POST",
   });
-  return { roomId: response[0].chat_id };
+  return { roomId: response.chat.chat_id };
 }

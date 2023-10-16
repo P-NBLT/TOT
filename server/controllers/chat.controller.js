@@ -10,7 +10,7 @@ export async function createSingleRoom(req, res, next) {
         message: chatRoom.message,
       })
     );
-  res.status(201).json({ chat: chatRoom[0] });
+  res.status(201).json(responseHelper.success({ chat: chatRoom[0] }));
 }
 
 export async function createGroopRoom(req, res) {
