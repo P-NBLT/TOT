@@ -70,12 +70,14 @@ async function sendPrivateMessage({
   const isBot = await Profile.isBot(recipientId);
   //if bot => use botManager and send the response back. this will be implemented from a different branch
   if (isBot.bot) {
-    cb("Bot response", timestamp, isBot.username, recipientId);
+    await messageServices
+      .sendMessageToBot(message, recipientId, roomId)
+      .then((response) => cb(response, timestamp, isBot.username, recipientId));
+    return;
+  } else {
+    socket
+      .to(roomId)
+      .emit(EVENTS_EMITTERS.sendMessage, message, recipientId, timestamp);
     return;
   }
-  // else
-  socket
-    .to(roomId)
-    .emit(EVENTS_EMITTERS.sendMessage, message, recipientId, timestamp);
-  return;
 }
