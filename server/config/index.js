@@ -41,4 +41,5 @@ export const config = {
   AWS_SECRET_KEY: process.env.AWS_SECRET_ACCESS_KEY,
   AWS_REGION: process.env.AWS_REGION,
   AWS_BUCKET: process.env.AWS_BUCKET_NAME,
+  OPEN_AI_API_KEY: process.env.OPEN_AI_API_KEY,
 };
