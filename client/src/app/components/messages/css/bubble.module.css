@@ -40,8 +40,10 @@
   overflow: auto;
   border-top: 1px solid grey;
   margin-top: 10;
-  width: 100%;
   flex: 1;
+  /* firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f0f0f0;
 }
 .inboxContainer-hidden {
   visibility: hidden;
@@ -72,4 +74,18 @@
   overflow: hidden;
   opacity: 0;
   z-index: -1;
+}
+
+.inboxContainer-visible::-webkit-scrollbar {
+  width: 5px;
+  background-color: darkgrey;
+}
+
+.inboxContainer-visible::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.inboxContainer-visible::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

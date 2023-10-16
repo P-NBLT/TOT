@@ -4,7 +4,7 @@ import conversationFeedModule from "./css/conversationFeed.module.css";
 import { userData } from "@/app/(portal)/feed/view/mockup";
 import { useDomPurify } from "@/app/hooks/useDomPurify";
 import { useRoomSocket } from "@/app/hooks/socket/useRoomSocket";
-import { formatTime } from "@/app/utils/date";
+import { formatTime, diffDate } from "@/app/utils/date";
 import { SOCKETS_EMITTERS } from "@/socket/socketEvents";
 // to delete
 import avatarPic from "@/assets/images/avatar.png";
@@ -27,6 +27,7 @@ const ConversationFeed: React.FC<{
   const [messageContent, setMessageContent] = useState<string>("");
   const { user } = useUser();
   const { displayHTMLMessage } = useDomPurify();
+  const dateMemory: any = []; // use in mapping the conversation
 
   function adjustHeight() {
     const textArea = textRef.current;
@@ -137,34 +138,43 @@ const ConversationFeed: React.FC<{
         style={{ height: `${bodyHeight}px` }}
       >
         {isLoading ? (
-          <p>Loading Messages</p>
+          <Typography margin={10}>Loading Messages</Typography>
         ) : messageQueue.length === 0 ? (
-          <p>Beginning of the conversation</p>
+          <Typography margin={10}>Beginning of the conversation</Typography>
         ) : (
-          messageQueue.map((message, idx) => (
-            <div className={conversationFeedModule.messageContainer} key={idx}>
-              <ProfilePic
-                location="comment"
-                //@ts-ignore
-                source={
-                  (message.userId === user?.id
-                    ? user?.profilePic
-                    : contactProfilePic) || avatarPic
-                }
-                className={conversationFeedModule.profilePic}
-              />
-              <div className={conversationFeedModule.header}>
-                <Typography>{message.username}</Typography>
-                <Typography fontSize={12}>
-                  {formatTime(message.time)}
-                </Typography>
-              </div>
-              {displayHTMLMessage(message.content, {
-                color: "black",
-                paddingLeft: 60,
-              })}
-            </div>
-          ))
+          messageQueue.map((message, idx) => {
+            const time = displayDate(message.timestamp, dateMemory);
+            return (
+              <>
+                {time && <TimeStamp idx={idx} time={time} />}
+                <div
+                  className={conversationFeedModule.messageContainer}
+                  key={idx}
+                >
+                  <ProfilePic
+                    location="comment"
+                    //@ts-ignore
+                    source={
+                      (message.userId === user?.id
+                        ? user?.profilePic
+                        : contactProfilePic) || avatarPic
+                    }
+                    className={conversationFeedModule.profilePic}
+                  />
+                  <div className={conversationFeedModule.header}>
+                    <Typography>{message.username}</Typography>
+                    <Typography fontSize={12}>
+                      {formatTime(message.time)}
+                    </Typography>
+                  </div>
+                  {displayHTMLMessage(message.content, {
+                    color: "black",
+                    paddingLeft: 60,
+                  })}
+                </div>
+              </>
+            );
+          })
         )}
         <span className={conversationFeedModule.break}></span>
       </div>
@@ -194,6 +204,28 @@ const ConversationFeed: React.FC<{
 
 export default ConversationFeed;
 
+const TimeStamp: React.FC<{ idx: number; time: string }> = ({ idx, time }) => {
+  return (
+    <div
+      style={{
+        marginTop: idx === 0 ? 5 : 20,
+      }}
+      className={conversationFeedModule["timestamp-container"]}
+    >
+      <div className={conversationFeedModule["timestamp-breakline"]} />
+      <Typography
+        fontSize={"sm"}
+        color="grey"
+        padding={"0, 15px"}
+        style={{ textAlign: "center" }}
+      >
+        {formatTime(time)}
+      </Typography>
+      <div className={conversationFeedModule["timestamp-breakline"]} />
+    </div>
+  );
+};
+
 function setElementHeight(
   element: HTMLElement | null,
   newHeight: number,
@@ -205,4 +237,19 @@ function setElementHeight(
       element.style.overflowY = overflowY;
     }
   }
+}
+
+function displayDate(time: string, dateMemory: any) {
+  if (dateMemory.length === 0) {
+    dateMemory.push(time);
+    return time;
+  }
+  const dateToCompareFrom = dateMemory[dateMemory.length - 1];
+  const diff = diffDate(dateToCompareFrom, time);
+  // 60 sec * 15
+  if (diff > 60 * 15) {
+    dateMemory.push(time);
+    return time;
+  }
+  return undefined;
 }

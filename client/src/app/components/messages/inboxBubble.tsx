@@ -105,7 +105,7 @@ const InboxBubble: React.FC<InboxBubbleProps> = ({
 
       setSearchResultsConnection(response.friends);
       setSearchResultsMessage(response.chats);
-    }, 500)(query);
+    }, 800)(query);
   }
 
   return (

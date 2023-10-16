@@ -4,7 +4,6 @@ import connectionFeedStyles from "./connectionFeed.module.css";
 import avatarPng from "@/assets/images/avatar.png"; // temporary to delete once image hosted in db
 
 type InboxFeedProps = {
-  //   messagingBoxRef: any;
   connections: any[]; // to correctly type once the structure for connections is clear
   addConversationToQueue: (connection: any) => void;
 };
@@ -27,11 +26,18 @@ const ConnectionFeed: React.FC<InboxFeedProps> = ({
               source={connection.profilePic || avatarPng}
             />
             <div className={connectionFeedStyles.rightContainer}>
-              <Typography color="black">
-                {truncate(connection.contactName, 20)}
+              <Typography color="black" style={{ minWidth: "fit-content" }}>
+                {truncate(connection.contactName, 15)}
               </Typography>
-              <Typography color="grey">
-                {truncate(connection.affinity, 10)}
+              <Typography
+                color="grey"
+                style={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {connection.affinity}
               </Typography>
             </div>
           </div>

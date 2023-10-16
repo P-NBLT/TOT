@@ -5,7 +5,6 @@ import { formatTime } from "@/app/utils/date";
 import avatarPic from "@/assets/images/avatar.png";
 
 type InboxFeedProps = {
-  // messagingBoxRef: any;
   messages: any[] | []; // to correctly type once the structure for messages is clear
   addConversationToQueue: (message: any) => void;
 };
