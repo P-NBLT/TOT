@@ -5,20 +5,19 @@ name: Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [19.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        
+
     services:
       postgres:
         image: postgres:15
@@ -29,24 +28,24 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-        
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Navigate to Server directory
-      run: cd server
-    - name: Install dependencies
-      run: npm ci
-      working-directory: ./server
-    - name: Build
-      run: npm run build --if-present
-      working-directory: ./server
-    - name: Run tests
-      run: npm test
-      env:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Navigate to Server directory
+        run: cd server
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./server
+      - name: Build
+        run: npm run build --if-present
+        working-directory: ./server
+      - name: Run tests
+        run: npm test
+        env:
           HOST: localhost
           DB_PORT: 5432
           USERNAME: ${{secrets.POSTGRES_USER}}
@@ -54,4 +53,5 @@ jobs:
           DATABASE: ${{secrets.POSTGRES_DB}}
           GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
           GITHUB_CLIENT_ID: ${{secrets.CLIENT_ID_GITHUB}}
-      working-directory: ./server
+          OPEN_AI_API_KEY: ${{secrets.OPENAI_API_KEY}}
+        working-directory: ./server
