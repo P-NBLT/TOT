@@ -80,7 +80,15 @@ const InboxBubble: React.FC<InboxBubbleProps> = ({
     }
   }, [isInboxFeed]);
 
-  function handleFocusEvents() {
+  async function handleFocusEvents(e: any) {
+    if (e.type === "focus") {
+      const response = await apiClient(
+        `search?id=${user!.id}&query=${e.target.value}`
+      );
+
+      setSearchResultsConnection(response.friends);
+      setSearchResultsMessage(response.chats);
+    }
     setTimeout(() => setIsInboxFeed(!isInboxFeed), 100);
   }
 
