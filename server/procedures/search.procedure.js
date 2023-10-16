@@ -47,11 +47,11 @@ ff.user_id as "contactId",
 ff.username as "contactName",
 ff.side,
 ff.affinity_name as affinity,
-ff.profile_pic as "profilePic"
+ff.profile_pic as "profilePic",
 fc.chat_id as "roomId",
 lm.message as content,
 lm.last_message_time as timestamp
 FROM FilteredFriends ff
-JOIN FilteredChats fc ON ff.user_id = fc.user_id
+LEFT JOIN FilteredChats fc ON ff.user_id = fc.user_id
 LEFT JOIN LastMessages lm ON fc.chat_id = lm.chat_id
 ORDER BY POSITION(lower($2) IN lower(ff.username));`;
