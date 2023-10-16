@@ -91,6 +91,7 @@ const ConversationFeed: React.FC<{
         },
       ]);
       setTimeout(() => scrollToBottom(), 10);
+      handleInboxFeed(roomId, newMessage.message);
     }
   }, [newMessage]);
 
