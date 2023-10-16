@@ -1,8 +1,10 @@
 import { Card, Input, ProfilePic } from "@/app/components";
 import React from "react";
-import { userData } from "@/app/(portal)/feed/view/mockup";
+import { useUser } from "@/app/controllers/userProvider";
+import avatarPic from "@/assets/images/avatar.png";
 
 const CreatePostCard: React.FC = () => {
+  const { user } = useUser();
   return (
     <Card
       style={{
@@ -13,7 +15,10 @@ const CreatePostCard: React.FC = () => {
         padding: "15px 10px",
       }}
     >
-      <ProfilePic location="comment" source={userData.profilePic.src} />
+      <ProfilePic
+        location="comment"
+        source={user?.profilePic! || avatarPic.src}
+      />
       <Input
         id="create-post"
         style={{

@@ -4,6 +4,7 @@ import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 import messageHeaderStyles from "./css/messageHeader.module.css";
 import avatarPng from "@/assets/images/avatar.png";
+import { useUser } from "@/app/controllers/userProvider";
 
 type MessageHeaderProps = {
   isExpended: boolean;
@@ -20,15 +21,21 @@ const MessageHeader: React.FC<MessageHeaderProps> = ({
   userData,
   handleCloseConversation,
 }) => {
+  const { user } = useUser();
   return (
     <div className={messageHeaderStyles.masterHeader}>
       <div className={messageHeaderStyles.leftContainer} onClick={handleExpand}>
         <ProfilePic
           location="bubbleMessage"
-          source={userData?.profilePic || avatarPng}
+          //@ts-ignore
+          source={
+            view === "room"
+              ? userData?.profilePic! || avatarPng
+              : user?.profilePic || avatarPng
+          }
         />
         <Typography color="black" marginLeft={5}>
-          {view === "room" ? userData.username : "Messaging"}
+          {view === "room" ? userData?.username : "Messaging"}
         </Typography>
       </div>
       {view === "messaging" && (
