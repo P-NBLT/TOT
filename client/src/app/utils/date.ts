@@ -13,7 +13,7 @@ export function formatTime(time: string) {
     return "Today";
   } else if (isYesterday(dateObject)) {
     return "Yesterday";
-  } else if (isBefore(dateObject, subDays(new Date(), 2))) {
+  } else if (isBefore(dateObject, subDays(new Date(), 1))) {
     return format(parseISO(time), "dd/MM/yyyy");
   }
 }
