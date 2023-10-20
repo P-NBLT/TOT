@@ -35,6 +35,9 @@ export const useRoomSocket = (roomId: string) => {
     socket.on(SOCKET_LISTENNER.LISTEN_MESSAGE, (message, roomId) => {
       setNewMessage(message);
     });
+    return () => {
+      socket.emit(SOCKETS_EMITTERS.LEAVE_ROOM, roomId);
+    };
   }, []);
 
   function sendMessageToServer(message: any) {
