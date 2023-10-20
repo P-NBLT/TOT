@@ -46,6 +46,7 @@ export async function initUser(socket, user) {
         socket,
         message,
         roomId,
+        user,
         recipientId: recipients[0].user_id,
         cb,
         timestamp: storedMessage.created_at,
@@ -63,21 +64,24 @@ async function sendPrivateMessage({
   socket,
   message,
   roomId,
+  user,
   cb,
   recipientId,
   timestamp,
 }) {
   const isBot = await Profile.isBot(recipientId);
-  //if bot => use botManager and send the response back. this will be implemented from a different branch
   if (isBot.bot) {
     await messageServices
       .sendMessageToBot(message, recipientId, roomId)
       .then((response) => cb(response, timestamp, isBot.username, recipientId));
     return;
   } else {
-    socket
-      .to(roomId)
-      .emit(EVENTS_EMITTERS.sendMessage, message, recipientId, timestamp);
+    socket.to(roomId).emit(EVENTS_EMITTERS.sendMessage, {
+      message,
+      userId: user.id,
+      timestamp,
+      username: user.username,
+    });
     return;
   }
 }

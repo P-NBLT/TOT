@@ -3,6 +3,13 @@ import { useSocket } from "@/app/controllers/socketProvider";
 import { useEffect, useState } from "react";
 import { SOCKETS_EMITTERS, SOCKET_LISTENNER } from "@/socket/socketEvents";
 
+type ChatHistory = {
+  message: string;
+  timestamp: string;
+  username: string;
+  userId: string;
+}[];
+
 export const useRoomSocket = (roomId: string) => {
   const [newMessage, setNewMessage] = useState<
     | { message: string; timestamp: string; username: string; userId: string }
@@ -19,14 +26,7 @@ export const useRoomSocket = (roomId: string) => {
     socket.emit(
       SOCKETS_EMITTERS.JOIN_ROOM,
       roomId,
-      (
-        chatHistory: {
-          message: string;
-          timestamp: string;
-          username: string;
-          userId: string;
-        }[]
-      ) => {
+      (chatHistory: ChatHistory) => {
         setChatHistory(chatHistory);
         setIsLoading(false);
       }
@@ -53,5 +53,11 @@ export const useRoomSocket = (roomId: string) => {
     );
   }
 
-  return { chatHistory, newMessage, isLoading, socket, sendMessageToServer };
+  return {
+    chatHistory,
+    newMessage,
+    isLoading,
+    socket,
+    sendMessageToServer,
+  };
 };

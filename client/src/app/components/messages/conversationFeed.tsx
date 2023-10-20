@@ -1,14 +1,17 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Button, ProfilePic, Typography } from "..";
 import conversationFeedModule from "./css/conversationFeed.module.css";
-import { userData } from "@/app/(portal)/feed/view/mockup";
 import { useDomPurify } from "@/app/hooks/useDomPurify";
 import { useRoomSocket } from "@/app/hooks/socket/useRoomSocket";
-import { formatTime, diffDate } from "@/app/utils/date";
+import {
+  formatTime,
+  diffDateInSec,
+  displayRoomChatDate,
+} from "@/app/utils/date";
 import { SOCKETS_EMITTERS } from "@/socket/socketEvents";
-// to delete
-import avatarPic from "@/assets/images/avatar.png";
 import { useUser } from "@/app/controllers/userProvider";
+import { apiClient } from "@/app/utils/apiClient";
+import avatarPic from "@/assets/images/avatar.png"; // to delete once a default avatar pic is associated to a user if no profile pic.
 
 const ConversationFeed: React.FC<{
   roomId: string;
@@ -17,6 +20,7 @@ const ConversationFeed: React.FC<{
 }> = ({ roomId, contactProfilePic, handleInboxFeed }) => {
   const textRef = useRef<HTMLTextAreaElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
+  const messageRef = useRef<HTMLDivElement>(null);
   const [textareaHeight, setTextareaHeight] = useState<number>(40);
   const [bodyHeight, setBodyHeight] = useState<number>(250);
   const { chatHistory, newMessage, isLoading, socket, sendMessageToServer } =
@@ -27,7 +31,10 @@ const ConversationFeed: React.FC<{
   const [messageContent, setMessageContent] = useState<string>("");
   const { user } = useUser();
   const { displayHTMLMessage } = useDomPurify();
-  const dateMemory: any = []; // use in mapping the conversation
+  let [offset, setOffset] = useState<number>(0);
+  const [allowFetchExtrahistory, setAllowFetchExtrahistory] =
+    useState<boolean>(false);
+  const allowFetchRef = useRef(allowFetchExtrahistory);
 
   function adjustHeight() {
     const textArea = textRef.current;
@@ -49,6 +56,47 @@ const ConversationFeed: React.FC<{
       setBodyHeight(newHeight);
     }
   }
+  let controller: AbortController | null = null;
+  async function fetchMoreHistory() {
+    if (allowFetchRef.current === false) return;
+    const body = bodyRef.current;
+    if (!body) return;
+    const totalScrollHeight = body.scrollHeight;
+    const visibleHeight = body.clientHeight;
+    const amountScrolled = body.scrollTop;
+    const previousScrollHeight = body.scrollHeight;
+
+    const threshold = 0.01 * (totalScrollHeight - visibleHeight); // 80% scroll to the top
+    if (amountScrolled <= threshold) {
+      // User has scrolled up by 99.9%
+      setAllowFetchExtrahistory(false);
+      if (controller) {
+        controller.abort();
+      }
+      controller = new AbortController();
+      const signal: AbortSignal = controller.signal;
+      const olderChatHistory = await apiClient(
+        `message/${roomId}?offset=${offset + 1}`,
+        { signal }
+      );
+      setOffset(offset++);
+
+      if (olderChatHistory) {
+        setMessageQueue((prev) => [...olderChatHistory, ...prev]);
+
+        setTimeout(() => {
+          const newScrollHeight = body.scrollHeight;
+          const addedHeight = newScrollHeight - previousScrollHeight;
+          body.scrollTop = body.scrollTop + addedHeight;
+        }, 20);
+        setAllowFetchExtrahistory(true);
+
+        setTimeout(() => {}, 100);
+      } else {
+        setAllowFetchExtrahistory(false);
+      }
+    }
+  }
 
   function scrollToBottomAtLoad() {
     const body = bodyRef.current;
@@ -68,13 +116,19 @@ const ConversationFeed: React.FC<{
 
   useEffect(() => {
     const textArea = textRef.current;
+    const body = bodyRef.current;
     scrollToBottomAtLoad();
+    setTimeout(() => setAllowFetchExtrahistory(true), 500);
     if (!textArea) return;
     const textarea = textRef.current;
     textarea.addEventListener("input", adjustHeight);
 
+    if (!body) return;
+    body.addEventListener("scroll", fetchMoreHistory);
+
     return () => {
       textarea.removeEventListener("input", adjustHeight);
+      body.removeEventListener("scroll", fetchMoreHistory);
       socket.emit(SOCKETS_EMITTERS.LEAVE_ROOM, roomId);
     };
   }, []);
@@ -85,8 +139,7 @@ const ConversationFeed: React.FC<{
         ...prev,
         {
           username: newMessage.username,
-          time: newMessage.timestamp,
-          profilePic: avatarPic,
+          timestamp: newMessage.timestamp,
           content: newMessage.message,
           userId: newMessage.userId,
         },
@@ -97,11 +150,24 @@ const ConversationFeed: React.FC<{
   }, [newMessage]);
 
   useEffect(() => {
-    if (chatHistory) {
+    if (chatHistory && offset === 0) {
       setMessageQueue(chatHistory);
       setTimeout(() => scrollToBottom(), 10);
+    } else if (chatHistory && offset > 0) {
+      const body = bodyRef.current;
+      setMessageQueue(() => [...chatHistory, ...messageQueue]);
+      if (!body) return;
+
+      setTimeout(() => {
+        messageRef.current?.scrollIntoView({ behavior: "smooth" });
+        setAllowFetchExtrahistory(true);
+      }, 500);
     }
   }, [chatHistory]);
+
+  useEffect(() => {
+    allowFetchRef.current = allowFetchExtrahistory;
+  }, [allowFetchExtrahistory]);
 
   function registerMessage(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setMessageContent(e.target.value);
@@ -117,8 +183,7 @@ const ConversationFeed: React.FC<{
       ...prev,
       {
         username: user!.username,
-        profilePic: userData.profilePic,
-        time: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
         content: messageContent,
         userId: user?.id,
       },
@@ -143,7 +208,14 @@ const ConversationFeed: React.FC<{
           <Typography margin={10}>Beginning of the conversation</Typography>
         ) : (
           messageQueue.map((message, idx) => {
-            const time = displayDate(message.timestamp, dateMemory);
+            const prevMessage = messageQueue[idx - 1];
+            const NextMessage = messageQueue[idx + 1];
+            const time = displayDate(message.timestamp, prevMessage?.timestamp);
+            const isDisplayed = displayUsernameAndProfilePic(
+              message,
+              prevMessage,
+              NextMessage
+            );
             return (
               <>
                 {time && <TimeStamp idx={idx} time={time} />}
@@ -151,22 +223,24 @@ const ConversationFeed: React.FC<{
                   className={conversationFeedModule.messageContainer}
                   key={idx}
                 >
-                  <ProfilePic
-                    location="comment"
-                    //@ts-ignore
-                    source={
-                      (message.userId === user?.id
-                        ? user?.profilePic
-                        : contactProfilePic) || avatarPic
-                    }
-                    className={conversationFeedModule.profilePic}
-                  />
-                  <div className={conversationFeedModule.header}>
-                    <Typography>{message.username}</Typography>
-                    <Typography fontSize={12}>
-                      {formatTime(message.time)}
-                    </Typography>
-                  </div>
+                  {isDisplayed && (
+                    <>
+                      {" "}
+                      <ProfilePic
+                        location="comment"
+                        //@ts-ignore
+                        source={
+                          user?.id === message.userId
+                            ? user?.profilePic
+                            : contactProfilePic || avatarPic
+                        }
+                        className={conversationFeedModule.profilePic}
+                      />
+                      <div className={conversationFeedModule.header}>
+                        <Typography>{message.username}</Typography>
+                      </div>
+                    </>
+                  )}
                   {displayHTMLMessage(message.content, {
                     color: "black",
                     paddingLeft: 60,
@@ -239,17 +313,39 @@ function setElementHeight(
   }
 }
 
-function displayDate(time: string, dateMemory: any) {
-  if (dateMemory.length === 0) {
-    dateMemory.push(time);
-    return time;
+function displayDate(currentMessageTime: string, prevMessageTime: any) {
+  if (!prevMessageTime) {
+    return currentMessageTime;
   }
-  const dateToCompareFrom = dateMemory[dateMemory.length - 1];
-  const diff = diffDate(dateToCompareFrom, time);
-  // 60 sec * 15
-  if (diff > 60 * 15) {
-    dateMemory.push(time);
-    return time;
-  }
-  return undefined;
+  const dateToCompareFrom = prevMessageTime;
+
+  const response = displayRoomChatDate(currentMessageTime, dateToCompareFrom);
+
+  if (response.isToday) {
+    const diff = diffDateInSec(dateToCompareFrom, currentMessageTime);
+    // more than 15 min
+    if (diff > 60 * 15) {
+      return currentMessageTime;
+    }
+  } else if (response.isToday === false && response.continue === true) {
+    return currentMessageTime;
+  } else return null;
+}
+
+function displayUsernameAndProfilePic(
+  currentMessage: any,
+  prevMessage: any,
+  nextMessage: any
+) {
+  if (!prevMessage) return true;
+
+  if (
+    currentMessage.userId === prevMessage.userId ||
+    (!nextMessage && currentMessage.userId === prevMessage.userId)
+  ) {
+    const diff = diffDateInSec(prevMessage.timestamp, currentMessage.timestamp);
+    // 2 minutes or less
+    if (diff <= 60 * 2) return false;
+    else return true;
+  } else if (currentMessage.userId !== prevMessage.userId) return true;
 }
