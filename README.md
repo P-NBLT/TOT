@@ -9,3 +9,7 @@ User profile creation functionality, allowing users to curate their personal spa
 One-on-one communication capabilities with various bots, providing a unique user experience.
 
 There is still a lot of work to be done, and I will update the README file while I make progress. So Stay tuned...!
+
+<img width="1436" alt="Screenshot 2023-10-19 at 11 34 43" src="https://github.com/P-NBLT/TOT/assets/98712114/38ba620b-cc15-4bbb-9850-b1981ab9e763">
+
+
