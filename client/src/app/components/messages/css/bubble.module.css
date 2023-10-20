@@ -1,0 +1,91 @@
+.master {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(240, 240, 240, 1);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 0 5px;
+  transition: 0.3s ease;
+  border: 2px solid grey;
+  margin-left: 10px;
+}
+
+.master-inbox {
+  width: 288px;
+  align-items: center;
+  justify-content: center;
+}
+
+.master-conversation {
+  justify-content: flex-start;
+  border-bottom: none;
+}
+
+.master button {
+  background-color: rgba(192, 192, 192, 1);
+  border-radius: 50px !important;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.inboxContainer-visible {
+  visibility: visible;
+  position: relative;
+  opacity: 1;
+  z-index: auto;
+  overflow: auto;
+  border-top: 1px solid grey;
+  margin-top: 10;
+  flex: 1;
+  /* firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f0f0f0;
+}
+.inboxContainer-hidden {
+  visibility: hidden;
+  position: absolute;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  opacity: 0;
+  z-index: -1;
+}
+
+.conversationContainer-visible {
+  visibility: visible;
+  position: relative;
+  opacity: 1;
+  z-index: auto;
+  overflow: auto;
+  border-top: 1px solid grey;
+  margin-top: 10;
+  flex: 1;
+}
+
+.conversationContainer-hidden {
+  visibility: hidden;
+  position: absolute;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  opacity: 0;
+  z-index: -1;
+}
+
+.inboxContainer-visible::-webkit-scrollbar {
+  width: 5px;
+  background-color: darkgrey;
+}
+
+.inboxContainer-visible::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.inboxContainer-visible::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

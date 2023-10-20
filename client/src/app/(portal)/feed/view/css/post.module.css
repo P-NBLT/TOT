@@ -1,0 +1,94 @@
+.engagementBar {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid grey;
+}
+
+.contentSection {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.padding-top {
+  padding-top: 5px;
+}
+
+.contentSectionAuthorField {
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+  margin-bottom: 10px;
+}
+
+.contentSectionContentField {
+  display: flex;
+  flex-direction: column;
+}
+
+.contentSectionImage {
+  margin: 0 auto;
+}
+
+.metricSection {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid grey;
+}
+
+.buttonActions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* grid-auto-flow: column; */
+  /* justify-content: initial; */
+  height: 50px;
+
+  /* max-width: calc(100% - 20px); */
+}
+
+.buttonActionsIcon {
+  width: 15px;
+  height: 15px;
+}
+
+.commentSection {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 45px); /* 45 = 10 column gap + 35 px profile pic */
+}
+
+.postCommentSectionContainer {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  margin-top: 20px;
+}
+
+.postInput {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  row-gap: 5px;
+}
+
+.commentPostContainer {
+  display: flex;
+  column-gap: 10px;
+  margin-top: 15px;
+}
+
+.commentIntereactionButtonContainer {
+  display: flex;
+  column-gap: 5px;
+}
+
+@media screen and (min-width: 500px) {
+  .commentSection {
+    width: 100%;
+  }
+}

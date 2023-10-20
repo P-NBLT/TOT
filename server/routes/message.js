@@ -8,5 +8,6 @@ router.use(isLoggedIn);
 
 router.post("/bot", messageController.sendMessageToBot);
 router.post("/user", messageController.sendMessageToUser);
+router.get("/:roomId", messageController.getMessagesByRoomId);
 
 export default router;

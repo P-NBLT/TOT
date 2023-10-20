@@ -54,6 +54,7 @@ const createProfileQuery = `CREATE TABLE profile (
         side VARCHAR(20) NOT NULL,
         affinity_name VARCHAR(30) REFERENCES affinity(name) NOT NULL,
         homeworld_name VARCHAR(30) REFERENCES planets(name),
+        profile_pic VARCHAR(250),
         created_at DATE DEFAULT NOW()
 );`;
 
@@ -69,7 +70,8 @@ const createPostsQuery = `CREATE TABLE posts (
 const createCommentsQuery = `CREATE TABLE "comments" (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id),
-        post_id INTEGER REFERENCES posts(id),
+        post_id INTEGER NOT NULL REFERENCES posts(id),
+        parent_comment_id INT REFERENCES comments(id),
         body text NOT NULL,
         likes INTEGER DEFAULT 0,
         created_at DATE DEFAULT NOW()

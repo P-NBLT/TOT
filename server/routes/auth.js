@@ -1,6 +1,7 @@
 import express from "express";
 import * as authController from "../controllers/auth.controller.js";
 import passport from "passport";
+import { config } from "../config/index.js";
 
 const router = express.Router();
 
@@ -8,6 +9,8 @@ const router = express.Router();
  *   LOCAL SIGNIN
  *  ______________
  */
+
+router.get("/verify", authController.verifyAuthentification);
 
 router.post("/signup", authController.createUser);
 
@@ -43,9 +46,15 @@ router.get(
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
 
-router.get("/google/callback", passport.authenticate("google"), (req, res) => {
-  return res.status(200).json({ user: req.user });
-});
+// router.get("/google/callback", passport.authenticate("google"), (req, res) => {
+//   return res.status(200).json({ user: req.user });
+// });
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    successRedirect: `${config.WEBSITE_DOMAIN}/registration`,
+  })
+);
 
 router.get("/google/success", (req, res) => {
   res.status(200).json({ user: req.user });
@@ -63,7 +72,10 @@ router.post("/logout", (req, res) => {
         .status(500)
         .json({ message: `Something went wrong while loging you out: ${err}` });
     }
-    return res.status(205).json("logout");
+    return res
+      .status(205)
+      .clearCookie("connect.sid", { path: "/" })
+      .json({ message: "logout" });
   });
 });
 

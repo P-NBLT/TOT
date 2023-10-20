@@ -31,7 +31,7 @@ describe("User create a profile", () => {
         if (err) return done(err);
         authenticatedSession = testSession;
 
-        id = res._body.user.id;
+        id = res._body.data.user.id;
         return done();
       });
   });
@@ -41,7 +41,7 @@ describe("User create a profile", () => {
       .send(porfileBody);
 
     const responseBody = response.body;
-    const user = responseBody.user;
+    const user = responseBody.data.user;
     expect(user).toHaveProperty("id");
     expect(user).toHaveProperty("username");
     expect(user.username).toBe(username);
@@ -56,7 +56,7 @@ describe("User login and have its username in the respone body", () => {
       .send(authBody)
       .expect(200);
 
-    const user = response.body.user;
+    const user = response.body.data.user;
     expect(user).toHaveProperty("username");
   });
 });

@@ -1,0 +1,15 @@
+.leftContainer,
+.masterHeader {
+  display: flex;
+  align-items: center;
+}
+
+.masterHeader {
+  padding: 10px 0;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.leftContainer {
+  cursor: pointer;
+}
